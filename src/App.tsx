@@ -2,11 +2,12 @@ import { useState } from "react"
 import { DashboardPage } from "./pages/DashboardPage"
 import { ImprintPage } from "./pages/ImprintPage"
 import { AppLayout } from "./components/layout/AppLayout"
+import type { ViewId } from "@/types/view"
 
-export type AppRoute = "dashboard" | "imprint"
+export type AppRoute = ViewId
 
-export default function App() {
-  const [route, setRoute] = useState<AppRoute>("dashboard")
+function App() {
+  const [route, setRoute] = useState<ViewId>("dashboard")
 
   return (
     <AppLayout activeRoute={route} onNavigate={setRoute}>
@@ -14,7 +15,11 @@ export default function App() {
     </AppLayout>
   )
 }
-/* export type ViewId = "dashboard" | "imprint"
+
+export default App
+
+/* export default App
+export type ViewId = "dashboard" | "imprint"
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewId>("dashboard")

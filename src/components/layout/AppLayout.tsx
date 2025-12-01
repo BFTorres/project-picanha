@@ -1,13 +1,13 @@
-// src/components/layout/AppLayout.tsx
-import type { ReactNode } from "react"
+/* import type { ReactNode } from "react" */
 import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { ViewId } from "@/types/view"
 
 type AppLayoutProps = {
-  children: ReactNode
-  activeRoute: "dashboard" | "imprint"
-  onNavigate: (route: "dashboard" | "imprint") => void
+  activeRoute: ViewId
+  onNavigate: (route: ViewId) => void
+  children: React.ReactNode
 }
 
 export function AppLayout({ children, activeRoute, onNavigate }: AppLayoutProps) {

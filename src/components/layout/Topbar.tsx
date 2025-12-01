@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import type { ViewId } from "@/App"
+import type { ViewId } from "@/types/view"
 import { useThemeSettings } from "@/context/theme-context"
 import { Button } from "@/components/ui/button"
 import {

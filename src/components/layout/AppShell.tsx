@@ -1,5 +1,5 @@
 import React from "react"
-import type { ViewId } from "@/App"
+import type { ViewId } from "@/types/view"
 import { Topbar } from "@/components/layout/Topbar"
 
 interface AppShellProps {
