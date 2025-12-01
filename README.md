@@ -35,7 +35,6 @@ Primary Roadmap helper and cheatsheets:
 
 - Git revisions: https://devhints.io/git-revisions
 
----
 
 ## 1. System requirements (Windows)
 
