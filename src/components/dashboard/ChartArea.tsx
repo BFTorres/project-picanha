@@ -22,7 +22,7 @@ export function ChartArea() {
           <span>
             {t("dashboard.chart.title", "Relative rates")}
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             {t("dashboard.chart.subtitle", {
               defaultValue: "Normalized per 1 {{base}}",
               base: baseCurrency,
@@ -47,17 +47,17 @@ export function ChartArea() {
         )}
 
         {!isLoading && !error && (
-          <div className="mt-4 flex h-48 items-end gap-4">
+          <div className="mt-4 flex h-32 items-end gap-4">
             {SYMBOLS.map((symbol) => {
               const value = rates[symbol]
               if (!value || !Number.isFinite(value) || !maxRate) {
                 return (
                   <div key={symbol} className="flex flex-1 flex-col items-center gap-1">
                     <div className="flex h-full w-full items-end justify-center rounded-md bg-muted" />
-                    <span className="text-xs font-mono text-muted-foreground">
+                    <span className="text-sm font-mono text-muted-foreground">
                       {symbol}
                     </span>
-                    <span className="text-[10px] text-muted-foreground">—</span>
+                    <span className="text-sm text-muted-foreground">—</span>
                   </div>
                 )
               }
@@ -73,10 +73,10 @@ export function ChartArea() {
                       aria-hidden="true"
                     />
                   </div>
-                  <span className="text-xs font-mono text-muted-foreground">
+                  <span className="text-sm font-mono text-muted-foreground">
                     {symbol}
                   </span>
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {value.toFixed(6)}
                   </span>
                 </div>

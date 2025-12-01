@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAccessibilityStore } from "@/stores/accessibility-store";
 import { useUiStore } from "@/stores/ui-store";
 import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
+import type { ViewId } from "@/types/view"
 
 /* type AppLayoutProps = {
   activeRoute: ViewId
@@ -14,9 +15,9 @@ import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
 } */
 
 type AppLayoutProps = {
-  children: ReactNode;
-  activeRoute: "dashboard" | "imprint";
-  onNavigate: (route: "dashboard" | "imprint") => void;
+  children: ReactNode
+  activeRoute: ViewId
+  onNavigate: (route: ViewId) => void
 };
 
 export function AppLayout({
@@ -36,10 +37,10 @@ export function AppLayout({
     fontFamilyClass
   );
 
-  function handleNavigate(route: "dashboard" | "imprint") {
-    onNavigate(route);
-    closeMobileSidebar();
-  }
+function handleNavigate(route: ViewId) {
+  onNavigate(route)
+  closeMobileSidebar()
+}
 
   return (
     <div className={rootClasses}>
@@ -110,12 +111,12 @@ export function AppLayout({
 }
 
 type SidebarContentProps = {
-  activeRoute: "dashboard" | "imprint";
-  onNavigate: (route: "dashboard" | "imprint") => void;
+  activeRoute: ViewId
+  onNavigate: (route: ViewId) => void
 };
 
 function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <>
@@ -126,25 +127,32 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
           onClick={() => onNavigate("dashboard")}
         />
         <SidebarItem
+          label={t("nav.accessibility", "Accessibility")}
+          active={activeRoute === "accessibility"}
+          onClick={() => onNavigate("accessibility")}
+        />
+        <SidebarItem
           label={t("nav.imprint", "Imprint")}
           active={activeRoute === "imprint"}
           onClick={() => onNavigate("imprint")}
         />
       </nav>
 
-      <AccessibilitySection />
+      {/* REMOVE the old <AccessibilitySection /> here */}
 
-      <div className="mt-auto space-y-2 border-t pt-4 text-sm text-muted-foreground">
-        <p className="font-medium">{t("nav.infoTitle", "Sandbox only")}</p>
+      <div className="mt-auto space-y-2 border-t pt-4 text-xs text-muted-foreground">
+        <p className="font-medium">
+          {t("nav.infoTitle", "Sandbox only")}
+        </p>
         <p>
           {t(
             "nav.infoBody",
-            "No real customer data. Public Coinbase API only."
+            "No real customer data. Public Coinbase API only.",
           )}
         </p>
       </div>
     </>
-  );
+  )
 }
 
 type SidebarItemProps = {
@@ -416,7 +424,7 @@ function ContrastIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
-function AccessibilitySection() {
+/* function AccessibilitySection() {
   const { t } = useTranslation();
   const { theme, fontSize, fontFamily, setTheme, setFontSize, setFontFamily } =
     useAccessibilityStore();
@@ -531,3 +539,4 @@ function AccessibilitySection() {
     </section>
   );
 }
+ */
