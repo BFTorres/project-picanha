@@ -1,3 +1,4 @@
+// src/stores/coinbase-store.ts
 import { create } from "zustand"
 
 type Rates = Record<string, number>
@@ -9,6 +10,7 @@ interface CoinbaseState {
   error: string | null
   lastUpdated: string | null
   fetchRates: (base?: string) => Promise<void>
+  setBaseCurrency: (base: string) => void
 }
 
 export const useCoinbaseStore = create<CoinbaseState>((set, get) => ({
@@ -17,6 +19,11 @@ export const useCoinbaseStore = create<CoinbaseState>((set, get) => ({
   isLoading: false,
   error: null,
   lastUpdated: null,
+
+  setBaseCurrency(baseCurrency) {
+    set({ baseCurrency })
+  },
+
   async fetchRates(base = get().baseCurrency) {
     const apiBase =
       import.meta.env.VITE_API_BASE_URL ?? "https://api.coinbase.com/v2"

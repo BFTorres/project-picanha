@@ -1,7 +1,6 @@
 // src/components/dashboard/RatesTable.tsx
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import {
@@ -19,22 +18,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+
 import { useCoinbaseStore } from "@/stores/coinbase-store"
+import { useWatchlistStore } from "@/stores/watchlist-store"
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const
 
 export function RatesTable() {
   const { t } = useTranslation()
-  const { baseCurrency, rates, isLoading, error } = useCoinbaseStore()
+  const { baseCurrency, rates, isLoading, error, fetchRates, setBaseCurrency } =
+    useCoinbaseStore()
+  const { symbols: watchlist, addSymbol } = useWatchlistStore()
 
   const [query, setQuery] = useState("")
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState<number>(10) // default: 10 rows per page
 
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null)
+  const [selectedRate, setSelectedRate] = useState<number | null>(null)
+
   // Keyboard shortcuts: ← and → for previous / next page
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      // Ignore when typing in inputs, textareas, selects, or comboboxes
       const target = e.target as HTMLElement | null
       const tag = target?.tagName
       const role = target?.getAttribute("role")
@@ -51,7 +66,7 @@ export function RatesTable() {
       if (e.key === "ArrowLeft") {
         setPage((prev) => (prev > 1 ? prev - 1 : prev))
       } else if (e.key === "ArrowRight") {
-        setPage((prev) => prev + 1) // clamped later in memo
+        setPage((prev) => prev + 1)
       }
     }
 
@@ -97,14 +112,24 @@ export function RatesTable() {
     const next = parseInt(value, 10)
     if (!Number.isNaN(next)) {
       setPageSize(next)
-      setPage(1) // reset to first page when page size changes
+      setPage(1)
     }
   }
 
   function handleQueryChange(value: string) {
     setQuery(value)
-    setPage(1) // reset to first page when filter changes
+    setPage(1)
   }
+
+  function openDetails(symbol: string, rate: number) {
+    setSelectedSymbol(symbol)
+    setSelectedRate(rate)
+    setDetailsOpen(true)
+  }
+
+  const isInWatchlist =
+    selectedSymbol != null &&
+    watchlist.includes(selectedSymbol.toUpperCase())
 
   return (
     <Card>
@@ -205,7 +230,18 @@ export function RatesTable() {
                 </thead>
                 <tbody>
                   {rowsForPage.map(([symbol, value]) => (
-                    <tr key={symbol} className="border-b last:border-0">
+                    <tr
+                      key={symbol}
+                      className="cursor-pointer border-b last:border-0 hover:bg-muted"
+                      onClick={() => openDetails(symbol, value)}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault()
+                          openDetails(symbol, value)
+                        }
+                      }}
+                    >
                       <td className="py-1.5 pl-2 pr-4 font-mono">{symbol}</td>
                       <td className="py-1.5 px-4 text-right">
                         {value.toFixed(6)}
@@ -363,7 +399,133 @@ export function RatesTable() {
             )}
           </>
         )}
+
+        {/* Symbol detail drawer */}
+        <SymbolDetailsSheet
+          open={detailsOpen}
+          onOpenChange={setDetailsOpen}
+          baseCurrency={baseCurrency}
+          symbol={selectedSymbol}
+          rate={selectedRate}
+          isInWatchlist={Boolean(isInWatchlist)}
+          onAddToWatchlist={() => {
+            if (selectedSymbol) {
+              addSymbol(selectedSymbol)
+            }
+          }}
+          onSetBaseCurrency={async () => {
+            if (!selectedSymbol) return
+            setBaseCurrency(selectedSymbol)
+            await fetchRates(selectedSymbol)
+          }}
+        />
       </CardContent>
     </Card>
+  )
+}
+
+type SymbolDetailsSheetProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  baseCurrency: string
+  symbol: string | null
+  rate: number | null
+  isInWatchlist: boolean
+  onAddToWatchlist: () => void
+  onSetBaseCurrency: () => void | Promise<void>
+}
+
+function SymbolDetailsSheet({
+  open,
+  onOpenChange,
+  baseCurrency,
+  symbol,
+  rate,
+  isInWatchlist,
+  onAddToWatchlist,
+  onSetBaseCurrency,
+}: SymbolDetailsSheetProps) {
+  const { t } = useTranslation()
+
+  // If nothing is selected, keep sheet hidden even if 'open' is true by mistake
+  const effectiveOpen = open && symbol != null && rate != null
+
+  const inverse =
+    rate != null && rate !== 0 ? 1 / rate : null
+
+  return (
+    <Sheet open={effectiveOpen} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-full max-w-md">
+        <SheetHeader>
+          <SheetTitle>
+            {symbol ? `${symbol} / ${baseCurrency}` : t("drawer.title", "Details")}
+          </SheetTitle>
+          <SheetDescription>
+            {t(
+              "drawer.description",
+              "Quick details and actions for the selected currency pair.",
+            )}
+          </SheetDescription>
+        </SheetHeader>
+
+        {symbol != null && rate != null && (
+          <div className="mt-4 space-y-4 text-sm">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">
+                {t("drawer.currentRateLabel", "Current rate")}
+              </p>
+              <p className="mt-1 font-mono text-base">
+                1 {baseCurrency} = {rate.toFixed(6)} {symbol}
+              </p>
+              {inverse != null && (
+                <p className="mt-1 font-mono text-xs text-muted-foreground">
+                  1 {symbol} ≈ {inverse.toFixed(6)} {baseCurrency}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">
+                {t("drawer.actionsLabel", "Actions")}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t(
+                  "drawer.actionsHint",
+                  "You can add this symbol to your watchlist or use it as the base currency for all rates.",
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <SheetFooter className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-between">
+          <Button
+            type="button"
+            variant={isInWatchlist ? "outline" : "default"}
+            size="sm"
+            disabled={isInWatchlist || !symbol}
+            onClick={onAddToWatchlist}
+          >
+            {isInWatchlist
+              ? t("drawer.inWatchlist", "Already in watchlist")
+              : t("drawer.addToWatchlist", "Add to watchlist")}
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={!symbol}
+            onClick={onSetBaseCurrency}
+          >
+            {t(
+              "drawer.setAsBase",
+              "Set {{symbol}} as base currency",
+              { symbol: symbol ?? "" },
+            )}
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   )
 }
