@@ -1,20 +1,21 @@
-import { useEffect } from "react"
-import { useTranslation } from "react-i18next"
-import { useCoinbaseStore } from "@/stores/coinbase-store"
-import { SectionCards } from "@/components/dashboard/SectionCards"
-import { ChartArea } from "@/components/dashboard/ChartArea"
-import { RatesTable } from "@/components/dashboard/RatesTable"
-import { WatchlistPanel } from "@/components/dashboard/WatchlistPanel"
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useCoinbaseStore } from "@/stores/coinbase-store";
+import { SectionCards } from "@/components/dashboard/SectionCards";
+/* import { ChartArea } from "@/components/dashboard/ChartArea"; */
+import { RatesTable } from "@/components/dashboard/RatesTable";
+import { WatchlistPanel } from "@/components/dashboard/WatchlistPanel";
+import { PriceChart } from "@/components/dashboard/PriceChart";
 
 export function DashboardPage() {
-  const { t } = useTranslation()
-  const { fetchRates, lastUpdated } = useCoinbaseStore()
+  const { t } = useTranslation();
+  const { fetchRates, lastUpdated } = useCoinbaseStore();
 
   useEffect(() => {
     if (!lastUpdated) {
-      void fetchRates("EUR")
+      void fetchRates("EUR");
     }
-  }, [fetchRates, lastUpdated])
+  }, [fetchRates, lastUpdated]);
 
   return (
     <div className="flex flex-1 flex-col gap-4 md:gap-6">
@@ -25,7 +26,7 @@ export function DashboardPage() {
         <p className="mt-1 text-sm text-muted-foreground">
           {t(
             "dashboard.subtitle",
-            "Live Coinbase EUR exchange rates, demo charts and a simple data table.",
+            "Live Coinbase EUR exchange rates, demo charts and a simple data table."
           )}
         </p>
       </div>
@@ -33,15 +34,14 @@ export function DashboardPage() {
       <SectionCards />
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <ChartArea />
+        <div className="lg:col-span-2 space-y-4">
+          <PriceChart />
+          <RatesTable />
         </div>
-        <div className="lg:col-span-1">
+        <div className="space-y-4">
           <WatchlistPanel />
         </div>
       </div>
-
-      <RatesTable />
     </div>
-  )
+  );
 }
