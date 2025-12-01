@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-export type ThemeMode = "light" | "dark" | "contrast"
+export type ThemeMode = "light" | "dark" | "contrast" | "contrastLight"
 export type FontSize = "sm" | "md" | "lg"
 export type FontFamily = "sans" | "serif" | "mono"
 

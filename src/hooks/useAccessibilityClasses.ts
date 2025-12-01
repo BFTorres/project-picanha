@@ -4,7 +4,12 @@ export function useAccessibilityClasses() {
   const { theme, fontFamily } = useAccessibilityStore()
 
   // Only contrast needs an extra class; light/dark are driven by .dark on <html>
-  const contrastClass = theme === "contrast" ? "app-theme-contrast" : ""
+  let contrastClass = ""
+  if (theme === "contrast") {
+    contrastClass = "app-theme-contrast"
+  } else if (theme === "contrastLight") {
+    contrastClass = "app-theme-contrast-light"
+  }
 
   const fontFamilyClass =
     fontFamily === "serif"
