@@ -9,43 +9,59 @@
   @apply min-h-screen transition-colors duration-200;
 }
 
+/* Theme shells – you can wire Tailwind utilities using @apply if desired */
+
 .app-theme-light {
-  @apply bg-slate-50 text-slate-900;
+  /* Usually nothing special if Tailwind "light" is default */
 }
 
 .app-theme-dark {
-  @apply bg-slate-950 text-slate-50;
+  /* If you use Tailwind dark mode, you can map it, or add your own tokens */
 }
 
 .app-theme-contrast {
-  /* Demo high-contrast variant */
-  @apply bg-black text-yellow-200;
+  /* Stronger contrast overrides on top of dark mode */
+  --background: oklch(0.05 0 0);
+  --foreground: oklch(0.99 0 0);
+  --card: oklch(0.1 0 0);
+  --card-foreground: oklch(0.99 0 0);
+  --border: oklch(0.99 0 0);
+  --input: oklch(0.2 0 0);
+  --ring: oklch(0.9 0 0);
+
+  /* Optional: louder accent color for focus states / primary buttons */
+  --primary: oklch(0.8 0.19 70);
+  --primary-foreground: oklch(0.15 0 0);
 }
 
 /* Font families */
+
 .app-font-sans {
-  @apply font-sans;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
 .app-font-serif {
-  @apply font-serif;
+  font-family: "Georgia", "Times New Roman", serif;
 }
 
 .app-font-mono {
-  @apply font-mono;
+  font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New",
+    monospace;
 }
 
-/* Base font sizes (relative, to keep zoom accessible) */
+/* Font sizes – these affect EVERYTHING inside the root container, including numbers */
+
 .app-font-size-sm {
-  font-size: 0.9rem;
+  font-size: 0.875rem; /* ~14px */
 }
 
 .app-font-size-md {
-  font-size: 1rem;
+  font-size: 1rem; /* 16px */
 }
 
 .app-font-size-lg {
-  font-size: 1.1rem;
+  font-size: 1.125rem; /* 18px */
 }
 
 @theme inline {

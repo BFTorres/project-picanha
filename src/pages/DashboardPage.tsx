@@ -4,6 +4,7 @@ import { useCoinbaseStore } from "@/stores/coinbase-store"
 import { SectionCards } from "@/components/dashboard/SectionCards"
 import { ChartArea } from "@/components/dashboard/ChartArea"
 import { RatesTable } from "@/components/dashboard/RatesTable"
+import { WatchlistPanel } from "@/components/dashboard/WatchlistPanel"
 
 export function DashboardPage() {
   const { t } = useTranslation()
@@ -36,8 +37,7 @@ export function DashboardPage() {
           <ChartArea />
         </div>
         <div className="lg:col-span-1">
-          {/* re-use existing card  */}
-          {/* keep just ChartArea + RatesTable */}
+          <WatchlistPanel />
         </div>
       </div>
 

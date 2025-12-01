@@ -1,6 +1,5 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useCoinbaseStore } from "@/stores/coinbase-store"
@@ -8,14 +7,18 @@ import { useCoinbaseStore } from "@/stores/coinbase-store"
 export function RatesTable() {
   const { t } = useTranslation()
   const { baseCurrency, rates, isLoading, error } = useCoinbaseStore()
+  const [query, setQuery] = useState("")
 
-  const rows = useMemo(
-    () =>
-      Object.entries(rates)
-        .filter(([symbol]) => symbol.length <= 5) // skip weird / synthetic pairs
-        .slice(0, 50), // keep table small
-    [rates],
-  )
+  const rows = useMemo(() => {
+    const entries = Object.entries(rates)
+      .filter(([symbol]) => symbol.length <= 5) // ignore crazy long keys
+      .slice(0, 200) // hard cap
+
+    if (!query.trim()) return entries
+
+    const q = query.trim().toLowerCase()
+    return entries.filter(([symbol]) => symbol.toLowerCase().includes(q))
+  }, [rates, query])
 
   return (
     <Card>
@@ -34,13 +37,14 @@ export function RatesTable() {
         <div className="flex items-center gap-2">
           <Input
             type="search"
-            disabled
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder={t(
               "dashboard.table.searchPlaceholder",
-              "Search (not wired yet, for demo only)",
+              "Filter by symbol, e.g. BTC",
             )}
             className="h-8 max-w-xs text-xs"
-            aria-disabled="true"
+            aria-label={t("dashboard.table.searchLabel", "Filter currencies")}
           />
         </div>
 
@@ -83,6 +87,19 @@ export function RatesTable() {
                     </td>
                   </tr>
                 ))}
+                {rows.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={2}
+                      className="py-4 text-center text-xs text-muted-foreground"
+                    >
+                      {t(
+                        "dashboard.table.noResults",
+                        "No currencies match your filter.",
+                      )}
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
