@@ -192,7 +192,7 @@ function HeaderLanguageToggle() {
   );
 }
 
-function ThemeToggleButton() {
+/* function ThemeToggleButton() {
   const { t } = useTranslation();
   const { theme, setTheme } = useAccessibilityStore();
 
@@ -202,7 +202,6 @@ function ThemeToggleButton() {
     setTheme(next);
   }
 
-  // We keep the title static and make the sr-only text dynamic for a11y
   const srLabel =
     theme === "light"
       ? t("a11y.toggleThemeToDark", "Switch to dark mode")
@@ -217,7 +216,7 @@ function ThemeToggleButton() {
       title={t("a11y.themeToggleTitle", "Toggle theme")}
       className="inline-flex size-8 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 group/toggle"
     >
-      {/* Shadcn-like icon SVG */}
+      {}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -241,9 +240,9 @@ function ThemeToggleButton() {
       <span className="sr-only">{srLabel}</span>
     </button>
   );
-}
+} */
 
-function ThemeToggleButtonVariant1() {
+/* function ThemeToggleButtonVariant1() {
   const { t } = useTranslation();
   const { theme, setTheme } = useAccessibilityStore();
 
@@ -275,9 +274,9 @@ function ThemeToggleButtonVariant1() {
       <span className="sr-only">{srLabel}</span>
     </Button>
   );
-}
+} */
 
-function ThemeToggleButtonVariant2() {
+/* function ThemeToggleButtonVariant2() {
   const { t } = useTranslation();
   const { theme, setTheme } = useAccessibilityStore();
 
@@ -310,7 +309,7 @@ function ThemeToggleButtonVariant2() {
       <span className="sr-only">{srLabel}</span>
     </Button>
   );
-}
+} */
 
 function ThemeToggleButtonVariant3() {
   const { t } = useTranslation();
