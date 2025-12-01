@@ -69,7 +69,6 @@ Download: https://code.visualstudio.com/download
 
 Chrome, Edge or Firefox (for devtools and local testing).
 
----
 
 ## 2. Repository setup (clone → install → run)
 
@@ -234,7 +233,6 @@ This file should be in the repo root and is already configured to ignore noise:
 node_modules/
 pnpm-lock.yaml
 yarn.lock
-package-lock.json
 
 # build output
 dist/
