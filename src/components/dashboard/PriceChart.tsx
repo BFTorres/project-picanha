@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   Area,
@@ -11,7 +11,14 @@ import {
 } from "recharts"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useCoinbaseStore } from "@/stores/coinbase-store"
 
@@ -23,9 +30,12 @@ type ChartPoint = {
 const SYMBOLS = ["BTC", "ETH", "SOL", "USD"] as const
 type SymbolCode = (typeof SYMBOLS)[number]
 
+const TIME_RANGES = ["1D", "1W", "1M"] as const
+type TimeRange = (typeof TIME_RANGES)[number]
+
 /**
- * Build a simple mock intraday series based on the current rate.
- * This keeps everything public / client-only, no private Coinbase endpoints.
+ * Simple mock intraday series based on the current rate.
+ * Used as a fallback when no backend history is available.
  */
 function buildMockSeries(rate: number | undefined, points = 24): ChartPoint[] {
   if (!rate || !Number.isFinite(rate)) return []
@@ -58,81 +68,199 @@ function formatHour(value: string) {
   })
 }
 
+type UseHistoricalSeriesArgs = {
+  symbol: SymbolCode
+  baseCurrency: string
+  range: TimeRange
+  spotRate?: number
+}
+
+/**
+ * Try to load real historical candles via backend proxy (`/api/history`).
+ * If that fails or returns nothing, fall back to a mock series.
+ */
+function useHistoricalSeries({
+  symbol,
+  baseCurrency,
+  range,
+  spotRate,
+}: UseHistoricalSeriesArgs) {
+  const [series, setSeries] = useState<ChartPoint[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function load() {
+      if (!spotRate || !Number.isFinite(spotRate)) {
+        setSeries([])
+        setError(null)
+        return
+      }
+
+      setLoading(true)
+      setError(null)
+
+      try {
+        const productId = `${symbol}-${baseCurrency}` // e.g. BTC-EUR
+        const params = new URLSearchParams({
+          productId,
+          range,
+        }).toString()
+
+        const res = await fetch(`/api/history?${params}`)
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`)
+        }
+
+        const json = (await res.json()) as { points?: ChartPoint[] }
+
+        if (!cancelled && Array.isArray(json.points) && json.points.length > 0) {
+          setSeries(
+            json.points
+              .map((p) => ({
+                time: p.time,
+                price: Number(p.price),
+              }))
+              .filter((p) => Number.isFinite(p.price)),
+          )
+          setError(null)
+        } else if (!cancelled) {
+          // backend returned nothing -> fallback to mock
+          setSeries(buildMockSeries(spotRate))
+          setError(null)
+        }
+      } catch (err) {
+        console.error("history fetch failed, using mock data", err)
+        if (!cancelled) {
+          setSeries(buildMockSeries(spotRate))
+          setError(
+            err instanceof Error ? err.message : "Unknown history fetch error",
+          )
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
+    }
+
+    void load()
+
+    return () => {
+      cancelled = true
+    }
+  }, [symbol, baseCurrency, range, spotRate])
+
+  return { series, loading, error }
+}
+
 export function PriceChart() {
   const { t } = useTranslation()
 
   const rates = useCoinbaseStore((state) => state.rates)
   const baseCurrency = useCoinbaseStore((state) => state.baseCurrency)
-  const isLoading = useCoinbaseStore((state) => state.isLoading)
-  const error = useCoinbaseStore((state) => state.error)
+  const baseIsLoading = useCoinbaseStore((state) => state.isLoading)
+  const baseError = useCoinbaseStore((state) => state.error)
 
   const [symbol, setSymbol] = useState<SymbolCode>("BTC")
+  const [range, setRange] = useState<TimeRange>("1D")
 
-  const series = useMemo(
-    () => buildMockSeries(rates[symbol]),
-    [rates, symbol],
+  const spotRate = rates[symbol]
+  const { series, loading: historyLoading } = useHistoricalSeries({
+    symbol,
+    baseCurrency,
+    range,
+    spotRate,
+  })
+
+  const effectiveLoading = baseIsLoading || historyLoading
+
+  const currentPrice = useMemo(
+    () => (series.length > 0 ? series[series.length - 1]!.price : undefined),
+    [series],
+  )
+  const firstPrice = useMemo(
+    () => (series.length > 0 ? series[0]!.price : undefined),
+    [series],
   )
 
-  const currentPrice =
-    series.length > 0 ? series[series.length - 1]!.price : undefined
-  const firstPrice = series.length > 0 ? series[0]!.price : undefined
-
   const changePct =
-    currentPrice !== undefined && firstPrice !== undefined && firstPrice !== 0
+    currentPrice !== undefined &&
+    firstPrice !== undefined &&
+    firstPrice !== 0
       ? ((currentPrice - firstPrice) / firstPrice) * 100
       : undefined
 
   return (
     <Card aria-label={t("dashboard.priceChart.ariaLabel", "Price chart")}>
-      <CardHeader className="flex flex-row items-center justify-between gap-2">
+      <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <CardTitle className="text-base sm:text-lg">
             {t("dashboard.priceChart.title", "Selected asset")}
           </CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-sm text-muted-foreground">
             {t(
               "dashboard.priceChart.subtitle",
-              "Mock intraday series based on current Coinbase rate.",
+              "Historical candles via backend proxy when available, otherwise simulated data.",
             )}
           </p>
         </div>
 
-        <Select
-          value={symbol}
-          onValueChange={(value) => setSymbol(value as SymbolCode)}
-        >
-          <SelectTrigger className="w-[120px]">
-            <SelectValue
-              placeholder={t(
-                "dashboard.priceChart.selectPlaceholder",
-                "Symbol",
-              )}
-            />
-          </SelectTrigger>
-          <SelectContent>
-            {SYMBOLS.map((code) => (
-              <SelectItem key={code} value={code}>
-                {code}
-              </SelectItem>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <Select
+            value={symbol}
+            onValueChange={(value) => setSymbol(value as SymbolCode)}
+          >
+            <SelectTrigger className="w-40">
+              <SelectValue
+                placeholder={t(
+                  "dashboard.priceChart.selectPlaceholder",
+                  "Symbol",
+                )}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {SYMBOLS.map((code) => (
+                <SelectItem key={code} value={code}>
+                  {code}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <div className="flex items-center gap-1">
+            {TIME_RANGES.map((value) => (
+              <Button
+                key={value}
+                type="button"
+                variant={range === value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setRange(value)}
+              >
+                {value}
+              </Button>
             ))}
-          </SelectContent>
-        </Select>
+          </div>
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {isLoading && (
+        {effectiveLoading && (
           <p className="text-sm text-muted-foreground">
             {t("common.loading", "Loading…")}
           </p>
         )}
 
-        {error && (
+        {!effectiveLoading && baseError && (
           <p className="text-sm text-destructive">
-            {t("common.errorPrefix", "Error:")} {error}
+            {t("common.errorPrefix", "Error:")} {baseError}
           </p>
         )}
 
-        {!isLoading && !error && series.length === 0 && (
+        {!effectiveLoading && !baseError && series.length === 0 && (
           <p className="text-sm text-muted-foreground">
             {t(
               "dashboard.priceChart.noData",
@@ -147,7 +275,7 @@ export function PriceChart() {
             role="img"
             aria-label={t(
               "dashboard.priceChart.chartAria",
-              "Line chart of simulated intraday price movements.",
+              "Line chart of price movements over the selected period.",
             )}
           >
             <ResponsiveContainer width="100%" height="100%">
@@ -187,7 +315,7 @@ export function PriceChart() {
         {currentPrice !== undefined && (
           <div className="flex flex-wrap items-baseline justify-between gap-3 text-sm">
             <div>
-              <p className="text-xs uppercase text-muted-foreground">
+              <p className="text-sm uppercase text-muted-foreground">
                 {t("dashboard.priceChart.currentLabel", "Current price")}
               </p>
               <p className="text-base font-semibold tabular-nums">
@@ -197,7 +325,7 @@ export function PriceChart() {
 
             {changePct !== undefined && (
               <div>
-                <p className="text-xs uppercase text-muted-foreground">
+                <p className="text-sm uppercase text-muted-foreground">
                   {t(
                     "dashboard.priceChart.changeLabel",
                     "Change over period",

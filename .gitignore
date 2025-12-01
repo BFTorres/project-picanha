@@ -34,3 +34,6 @@ desktop.ini
 
 # test coverage
 coverage/
+
+# backend
+server/.env
