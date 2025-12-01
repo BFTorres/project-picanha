@@ -1,3 +1,6 @@
+<img src="https://cdn.pixabay.com/photo/2023/09/22/07/53/ai-generated-8268380_1280.jpg" alt="BFT-Logo" margin="auto 0px"/>
+- by renatonutri
+
 # project-picanha
 
 A small React + TypeScript learning project using Vite, Tailwind CSS v4, shadcn/ui, TanStack Query, react-i18next, and the public Coinbase API.
