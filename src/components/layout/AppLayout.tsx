@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAccessibilityStore } from "@/stores/accessibility-store";
 import { useUiStore } from "@/stores/ui-store";
 import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
-import type { ViewId } from "@/types/view"
+import type { ViewId } from "@/types/view";
 
 /* type AppLayoutProps = {
   activeRoute: ViewId
@@ -15,9 +15,9 @@ import type { ViewId } from "@/types/view"
 } */
 
 type AppLayoutProps = {
-  children: ReactNode
-  activeRoute: ViewId
-  onNavigate: (route: ViewId) => void
+  children: ReactNode;
+  activeRoute: ViewId;
+  onNavigate: (route: ViewId) => void;
 };
 
 export function AppLayout({
@@ -37,10 +37,10 @@ export function AppLayout({
     fontFamilyClass
   );
 
-function handleNavigate(route: ViewId) {
-  onNavigate(route)
-  closeMobileSidebar()
-}
+  function handleNavigate(route: ViewId) {
+    onNavigate(route);
+    closeMobileSidebar();
+  }
 
   return (
     <div className={rootClasses}>
@@ -111,12 +111,12 @@ function handleNavigate(route: ViewId) {
 }
 
 type SidebarContentProps = {
-  activeRoute: ViewId
-  onNavigate: (route: ViewId) => void
+  activeRoute: ViewId;
+  onNavigate: (route: ViewId) => void;
 };
 
 function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <>
@@ -125,6 +125,11 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
           label={t("nav.dashboard", "Dashboard")}
           active={activeRoute === "dashboard"}
           onClick={() => onNavigate("dashboard")}
+        />
+        <SidebarItem
+          label={t("nav.information", "Information")}
+          active={activeRoute === "information"}
+          onClick={() => onNavigate("information")}
         />
         <SidebarItem
           label={t("nav.accessibility", "Accessibility")}
@@ -138,21 +143,17 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
         />
       </nav>
 
-      {/* REMOVE the old <AccessibilitySection /> here */}
-
       <div className="mt-auto space-y-2 border-t pt-4 text-xs text-muted-foreground">
-        <p className="font-medium">
-          {t("nav.infoTitle", "Sandbox only")}
-        </p>
+        <p className="font-medium">{t("nav.infoTitle", "Sandbox only")}</p>
         <p>
           {t(
             "nav.infoBody",
-            "No real customer data. Public Coinbase API only.",
+            "No real customer data. Public Coinbase API only."
           )}
         </p>
       </div>
     </>
-  )
+  );
 }
 
 type SidebarItemProps = {
@@ -328,24 +329,24 @@ function ThemeToggleButtonVariant3() {
       theme === "light"
         ? "dark"
         : theme === "dark"
-          ? "contrast"
-          : theme === "contrast"
-            ? "contrastLight"
-            : "light" // contrastLight -> light
-    setTheme(next)
+        ? "contrast"
+        : theme === "contrast"
+        ? "contrastLight"
+        : "light"; // contrastLight -> light
+    setTheme(next);
   }
 
   const srLabel =
     theme === "light"
       ? t("a11y.toggleThemeToDark", "Switch to dark mode")
       : theme === "dark"
-        ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
-        : theme === "contrast"
-          ? t(
-              "a11y.toggleThemeToContrastLight",
-              "Switch to high contrast light mode",
-            )
-          : t("a11y.toggleThemeToLight", "Switch to light mode")
+      ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
+      : theme === "contrast"
+      ? t(
+          "a11y.toggleThemeToContrastLight",
+          "Switch to high contrast light mode"
+        )
+      : t("a11y.toggleThemeToLight", "Switch to light mode");
 
   const Icon =
     theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon;
@@ -421,7 +422,7 @@ function ContrastIcon(props: React.SVGProps<SVGSVGElement>) {
       <circle cx="12" cy="12" r="9" />
       <path d="M12 3v18" />
     </svg>
-  )
+  );
 }
 
 /* function AccessibilitySection() {

@@ -1,1 +1,1 @@
-export type ViewId = "dashboard" | "imprint" | "accessibility"
+export type ViewId = "dashboard" | "information" | "accessibility" | "imprint"
