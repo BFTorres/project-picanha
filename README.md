@@ -41,7 +41,8 @@ After install:
 Download: https://git-scm.com/downloads
 After install:
 
-```git --version
+```
+git --version
 ```
 
 **Visual Studio Code**
@@ -60,7 +61,8 @@ Chrome, Edge or Firefox (for devtools and local testing).
 
 Open PowerShell (or terminal):
 
-```cd C:\ByBernardo-BFT\React    # adjust to your local projects folder
+```
+cd C:\ByBernardo-BFT\React    # adjust to your local projects folder
 
 git clone https://github.com/BFTorres/project-picanha.git
 cd project-picanha
@@ -70,7 +72,8 @@ cd project-picanha
 
 From the project root:
 
-```npm install
+```
+npm install
 ```
 
 This will install:
@@ -95,19 +98,22 @@ We use a .env file for configuration, currently only for the Coinbase API base U
 
 Create a local .env using the example:
 
-```copy .env.example .env
+```
+copy .env.example .env
 ```
 
 Default content (keep it unless you have a reason to change it):
 
-```VITE_API_BASE_URL=https://api.coinbase.com/v2
+```
+VITE_API_BASE_URL=https://api.coinbase.com/v2
 ```
 
 VITE_API_BASE_URL is read via import.meta.env.VITE_API_BASE_URL in the code.
 
 ### 2.4 Run the dev server
 
-```npm run dev
+```
+npm run dev
 ```
 
 Vite outputs a local URL, usually: http://localhost:5173
@@ -115,7 +121,8 @@ Open it in your browser.
 
 ### 2.5 Build for production
 
-```npm run build
+```
+npm run build
 ```
 
 Outputs production bundles to dist/. That directory is what you’d deploy to a static host.
@@ -136,7 +143,8 @@ Repository branches:
 
 Local branches:
 
-```git branch
+```
+git branch
 # master
 # bernardo
 # adam
@@ -145,7 +153,8 @@ Local branches:
 
 Remote branches:
 
-```git branch -r
+```
+git branch -r
 # origin/master
 # origin/bernardo
 # origin/adam
@@ -156,12 +165,14 @@ Remote branches:
 
 Switch to your branch
 
-```git checkout bernardo   # or adam / michael
+```
+git checkout bernardo   # or adam / michael
 ```
 
 Update your branch
 
-```git pull
+```
+git pull
 ```
 
 Develop
@@ -172,14 +183,16 @@ Develop
 
 Stage and commit
 
-```git status              # check changes
+```
+git status              # check changes
 git add .               # or only specific files
 git commit -m "feat: short description"
 
 ```
 Push
 
-```git push origin bernardo
+```
+git push origin bernardo
 ```
 
 Open Pull Request into master when you want your changes merged.
@@ -200,7 +213,8 @@ Open Pull Request into master when you want your changes merged.
 
 This file should be in the repo root and is already configured to ignore noise:
 
-```# dependencies
+```
+# dependencies
 node_modules/
 pnpm-lock.yaml
 yarn.lock
@@ -251,7 +265,8 @@ Why:
 
 Template for local .env files. This is committed:
 
-```# Example environment variables for project-picanha.
+```
+# Example environment variables for project-picanha.
 # Copy this file to `.env` for local development.
 
 VITE_API_BASE_URL=https://api.coinbase.com/v2
@@ -313,7 +328,8 @@ How we use it:
 
 - src/index.css contains:
 
-```@import "tailwindcss";
+```
+@import "tailwindcss";
 ```
 
 - We define class-based themes:
@@ -439,7 +455,8 @@ We use public, unauthenticated Coinbase endpoints; no API keys, no login, no use
 
 Exchange rates:
 
-```GET https://api.coinbase.com/v2/exchange-rates?currency=EUR
+```
+GET https://api.coinbase.com/v2/exchange-rates?currency=EUR
 ```
 
 From Coinbase docs:
@@ -460,7 +477,8 @@ Docs:
 
 Simplified response:
 
-```{
+```
+{
   "data": {
     "currency": "EUR",
     "rates": {
