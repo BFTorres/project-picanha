@@ -15,11 +15,25 @@ Goal:
 
 No real customer data, no company IP. Pure sandbox.
 
-Primary Roadmap helper: 
+Primary Roadmap helper and cheatsheets: 
 
-https://roadmap.sh/react
+- React Roadmap 2025: https://roadmap.sh/react
 
-https://roadmap.sh/typescript
+- TypeScript Roadmap 2025: https://roadmap.sh/typescript
+
+- GitHub Git cheatsheet: https://education.github.com/git-cheat-sheet-education.pdf
+
+- Conventional commits: https://www.conventionalcommits.org/en/v1.0.0/
+
+- Git cheatsheet: https://git-scm.com/cheat-sheet
+
+- NPM cheatsheet: https://devhints.io/npm
+
+- Git branch cheatsheet: https://devhints.io/git-branch
+
+- Git tricks: https://devhints.io/git-tricks
+
+- Git revisions: https://devhints.io/git-revisions
 
 ---
 
