@@ -31,17 +31,18 @@ Install these once on your machine:
 Download: https://nodejs.org/en/download  
 After install:
 
-   ```bash
+   ```
+   bash
    node -v
    npm -v
-  ´´´
+  ```
 **Git**
 
 Download: https://git-scm.com/downloads
 After install:
 
 ```git --version
-´´´
+```
 
 **Visual Studio Code**
 
@@ -63,14 +64,14 @@ Open PowerShell (or terminal):
 
 git clone https://github.com/BFTorres/project-picanha.git
 cd project-picanha
-´´´
+```
 
 ### 2.2 Install dependencies
 
 From the project root:
 
 ```npm install
-´´´
+```
 
 This will install:
 
@@ -95,19 +96,19 @@ We use a .env file for configuration, currently only for the Coinbase API base U
 Create a local .env using the example:
 
 ```copy .env.example .env
-´´´
+```
 
 Default content (keep it unless you have a reason to change it):
 
 ```VITE_API_BASE_URL=https://api.coinbase.com/v2
-´´´
+```
 
 VITE_API_BASE_URL is read via import.meta.env.VITE_API_BASE_URL in the code.
 
 ### 2.4 Run the dev server
 
 ```npm run dev
-´´´
+```
 
 Vite outputs a local URL, usually: http://localhost:5173
 Open it in your browser.
@@ -115,7 +116,7 @@ Open it in your browser.
 ### 2.5 Build for production
 
 ```npm run build
-´´´
+```
 
 Outputs production bundles to dist/. That directory is what you’d deploy to a static host.
 
@@ -140,7 +141,7 @@ Local branches:
 # bernardo
 # adam
 # michael
-´´´
+```
 
 Remote branches:
 
@@ -149,19 +150,19 @@ Remote branches:
 # origin/bernardo
 # origin/adam
 # origin/michael
-´´´
+```
 
 ### 3.2 Typical workflow (per person)
 
 Switch to your branch
 
 ```git checkout bernardo   # or adam / michael
-´´´
+```
 
 Update your branch
 
 ```git pull
-´´´
+```
 
 Develop
 
@@ -175,11 +176,11 @@ Stage and commit
 git add .               # or only specific files
 git commit -m "feat: short description"
 
-´´´
+```
 Push
 
 ```git push origin bernardo
-´´´
+```
 
 Open Pull Request into master when you want your changes merged.
 
@@ -234,7 +235,7 @@ desktop.ini
 
 # coverage
 coverage/
-´´´
+```
 
 Why:
 
@@ -255,7 +256,7 @@ Template for local .env files. This is committed:
 
 VITE_API_BASE_URL=https://api.coinbase.com/v2
 # VITE_SOME_FUTURE_KEY=your-key-here
-´´´
+```
 
 Usage:
 
@@ -313,7 +314,7 @@ How we use it:
 - src/index.css contains:
 
 ```@import "tailwindcss";
-´´´
+```
 
 - We define class-based themes:
 
@@ -439,7 +440,7 @@ We use public, unauthenticated Coinbase endpoints; no API keys, no login, no use
 Exchange rates:
 
 ```GET https://api.coinbase.com/v2/exchange-rates?currency=EUR
-´´´
+```
 
 From Coinbase docs:
 
@@ -470,7 +471,7 @@ Simplified response:
     }
   }
 }
-´´´
+```
 
 In this project:
 
