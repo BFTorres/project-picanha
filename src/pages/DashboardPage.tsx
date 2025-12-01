@@ -1,29 +1,47 @@
-import React from "react"
+import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { CoinbaseRatesCard } from "@/components/dashboard/CoinbaseRatesCard"
-import { AccessibilityPanel } from "@/components/settings/AccessibilityPanel"
+import { useCoinbaseStore } from "@/stores/coinbase-store"
+import { SectionCards } from "@/components/dashboard/SectionCards"
+import { ChartArea } from "@/components/dashboard/ChartArea"
+import { RatesTable } from "@/components/dashboard/RatesTable"
 
-export const DashboardPage: React.FC = () => {
+export function DashboardPage() {
   const { t } = useTranslation()
+  const { fetchRates, lastUpdated } = useCoinbaseStore()
+
+  useEffect(() => {
+    if (!lastUpdated) {
+      void fetchRates("EUR")
+    }
+  }, [fetchRates, lastUpdated])
 
   return (
-    <section aria-labelledby="dashboard-heading" className="space-y-4">
-      <header>
-        <h1
-          id="dashboard-heading"
-          className="text-xl font-semibold tracking-tight"
-        >
-          {t("dashboard.heading")}
+    <div className="flex flex-1 flex-col gap-4 md:gap-6">
+      <div>
+        <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
+          {t("dashboard.title", "Crypto overview")}
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t("dashboard.description")}
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t(
+            "dashboard.subtitle",
+            "Live Coinbase EUR exchange rates, demo charts and a simple data table.",
+          )}
         </p>
-      </header>
-
-      <div className="grid gap-4 md:grid-cols-[2fr,1.4fr]">
-        <CoinbaseRatesCard />
-        <AccessibilityPanel />
       </div>
-    </section>
+
+      <SectionCards />
+
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <ChartArea />
+        </div>
+        <div className="lg:col-span-1">
+          {/* re-use existing card  */}
+          {/* keep just ChartArea + RatesTable */}
+        </div>
+      </div>
+
+      <RatesTable />
+    </div>
   )
 }

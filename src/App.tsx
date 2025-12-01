@@ -1,11 +1,20 @@
-import React, { useState } from "react"
-import { useThemeSettings } from "@/context/theme-context"
-import { cn } from "@/lib/utils"
-import { DashboardPage } from "@/pages/DashboardPage"
-import { ImprintPage } from "@/pages/ImprintPage"
-import { AppShell } from "@/components/layout/AppShell"
+import { useState } from "react"
+import { DashboardPage } from "./pages/DashboardPage"
+import { ImprintPage } from "./pages/ImprintPage"
+import { AppLayout } from "./components/layout/AppLayout"
 
-export type ViewId = "dashboard" | "imprint"
+export type AppRoute = "dashboard" | "imprint"
+
+export default function App() {
+  const [route, setRoute] = useState<AppRoute>("dashboard")
+
+  return (
+    <AppLayout activeRoute={route} onNavigate={setRoute}>
+      {route === "dashboard" ? <DashboardPage /> : <ImprintPage />}
+    </AppLayout>
+  )
+}
+/* export type ViewId = "dashboard" | "imprint"
 
 export const App: React.FC = () => {
   const [view, setView] = useState<ViewId>("dashboard")
@@ -39,4 +48,4 @@ export const App: React.FC = () => {
       </AppShell>
     </div>
   )
-}
+} */
