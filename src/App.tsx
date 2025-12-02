@@ -6,6 +6,12 @@ import type { ViewId } from "@/types/view";
 import { useAccessibilityEffects } from "@/hooks/useAccessibilityEffects";
 import { AccessibilityPage } from "./pages/AccessibilityPage";
 import { InformationPage } from "./pages/InformationPage";
+import { DashboardAnalyticsPage } from "./pages/DashboardAnalyticsPage";
+import { DashboardWatchlistPage } from "./pages/DashboardWatchlistPage";
+import { AssetsCryptoPage } from "./pages/AssetsCryptoPage";
+import { AssetsFiatPage } from "./pages/AssetsFiatPage";
+import { LegalPrivacyPage } from "./pages/LegalPrivacyPage";
+import { LegalTermsPage } from "./pages/LegalTermsPage";
 
 // Root React component of the application.
 // This is basically our “router” for the different views (dashboard, info, etc.),
@@ -13,23 +19,53 @@ import { InformationPage } from "./pages/InformationPage";
 export function App() {
   // `route` holds the currently active view.
   // The union type `ViewId` ensures we only use valid view names.
-  const [route, setRoute] = useState<ViewId>("dashboard");
+  const [route, setRoute] = useState<ViewId>("dashboard-overview");
 
   // Apply global accessibility / theme / font-size effects to the <html> element.
   // This hook syncs the accessibility store (Zustand) with the real DOM.
   useAccessibilityEffects();
 
-  // Decide which page component to render based on the current route.
   let content;
-  if (route === "dashboard") {
-    content = <DashboardPage />;
-  } else if (route === "information") {
-    content = <InformationPage />;
-  } else if (route === "accessibility") {
-    content = <AccessibilityPage />;
-  } else {
-    // Fallback route: imprint / legal page.
-    content = <ImprintPage />;
+  // Decide which page component to render based on the current route.
+  switch (route) {
+    // Dashboard group
+    case "dashboard-overview":
+      content = <DashboardPage />;
+      break;
+    case "dashboard-analytics":
+      content = <DashboardAnalyticsPage />;
+      break;
+    case "dashboard-watchlist":
+      content = <DashboardWatchlistPage />;
+      break;
+
+    // Assets group
+    case "assets-overview":
+      content = <InformationPage />;
+      break;
+    case "assets-crypto":
+      content = <AssetsCryptoPage />;
+      break;
+    case "assets-fiat":
+      content = <AssetsFiatPage />;
+      break;
+
+    // Legal group
+    case "legal-imprint":
+      content = <ImprintPage />;
+      break;
+    case "legal-privacy":
+      content = <LegalPrivacyPage />;
+      break;
+    case "legal-terms":
+      content = <LegalTermsPage />;
+      break;
+
+    // Accessibility (no sub-pages)
+    case "accessibility":
+    default:
+      content = <AccessibilityPage />;
+      break;
   }
 
   // AppLayout renders the shared shell (sidebar, topbar, etc.)

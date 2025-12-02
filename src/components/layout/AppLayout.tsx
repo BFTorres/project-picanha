@@ -1,45 +1,46 @@
-import type { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-/* import type { ViewId } from "@/types/view" */
-import { useAccessibilityStore } from "@/stores/accessibility-store";
-import { useUiStore } from "@/stores/ui-store";
-import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
-import type { ViewId } from "@/types/view";
-
-/* type AppLayoutProps = {
-  activeRoute: ViewId
-  onNavigate: (route: ViewId) => void
-  children: React.ReactNode
-} */
+import { useState, type ReactNode } from "react"
+import { useTranslation } from "react-i18next"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { useAccessibilityStore } from "@/stores/accessibility-store"
+import { useUiStore } from "@/stores/ui-store"
+import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses"
+import type { ViewId } from "@/types/view"
+import type { LucideIcon } from "lucide-react"
+import {
+  LayoutDashboard,
+  Coins,
+  Scale,
+  Accessibility as AccessibilityIcon,
+  ChevronRight,
+} from "lucide-react"
 
 type AppLayoutProps = {
-  children: ReactNode;
-  activeRoute: ViewId;
-  onNavigate: (route: ViewId) => void;
-};
+  children: ReactNode
+  activeRoute: ViewId
+  onNavigate: (route: ViewId) => void
+}
 
 export function AppLayout({
   children,
   activeRoute,
   onNavigate,
 }: AppLayoutProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { mobileSidebarOpen, toggleMobileSidebar, closeMobileSidebar } =
-    useUiStore();
+    useUiStore()
 
-  const { contrastClass, fontFamilyClass } = useAccessibilityClasses();
+  const { contrastClass, fontFamilyClass } = useAccessibilityClasses()
 
   const rootClasses = cn(
     "app-root flex min-h-screen bg-background text-foreground",
     contrastClass,
-    fontFamilyClass
-  );
+    fontFamilyClass,
+  )
 
   function handleNavigate(route: ViewId) {
-    onNavigate(route);
-    closeMobileSidebar();
+    onNavigate(route)
+    closeMobileSidebar()
   }
 
   return (
@@ -80,7 +81,6 @@ export function AppLayout({
           </div>
 
           <div className="flex flex-1 justify-end gap-2">
-            {/* <ThemeToggleButton /> */}
             <ThemeToggleButtonVariant3 />
             <HeaderLanguageToggle />
           </div>
@@ -107,40 +107,194 @@ export function AppLayout({
         </div>
       )}
     </div>
-  );
+  )
 }
 
 type SidebarContentProps = {
-  activeRoute: ViewId;
-  onNavigate: (route: ViewId) => void;
-};
+  activeRoute: ViewId
+  onNavigate: (route: ViewId) => void
+}
 
 function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
+
+  type NavSectionId = "dashboard" | "assets" | "legal" | "accessibility"
+
+  interface NavItemConfig {
+    id: ViewId
+    label: string
+  }
+
+  interface NavSectionConfig {
+    id: NavSectionId
+    label: string
+    icon: LucideIcon
+    collapsible: boolean
+    items: NavItemConfig[]
+  }
+
+  // Config-driven structure for the sidebar.
+  // This is where you add/remove sections or sub-pages later.
+  const sections: NavSectionConfig[] = [
+    {
+      id: "dashboard",
+      label: t("nav.dashboard", "Dashboard"),
+      icon: LayoutDashboard,
+      collapsible: true,
+      items: [
+        {
+          id: "dashboard-overview",
+          label: t("nav.dashboardOverview", "Overview"),
+        },
+        {
+          id: "dashboard-analytics",
+          label: t("nav.dashboardAnalytics", "Analytics"),
+        },
+        {
+          id: "dashboard-watchlist",
+          label: t("nav.dashboardWatchlist", "Watchlist"),
+        },
+      ],
+    },
+    {
+      id: "assets",
+      label: t("nav.assets", "Assets"),
+      icon: Coins,
+      collapsible: true,
+      items: [
+        {
+          id: "assets-overview",
+          label: t("nav.assetsOverview", "Overview"),
+        },
+        {
+          id: "assets-crypto",
+          label: t("nav.assetsCrypto", "Crypto"),
+        },
+        {
+          id: "assets-fiat",
+          label: t("nav.assetsFiat", "Fiat"),
+        },
+      ],
+    },
+    {
+      id: "legal",
+      label: t("nav.legal", "Legal"),
+      icon: Scale,
+      collapsible: true,
+      items: [
+        {
+          id: "legal-imprint",
+          label: t("nav.legalImprint", "Imprint"),
+        },
+        {
+          id: "legal-privacy",
+          label: t("nav.legalPrivacy", "Privacy"),
+        },
+        {
+          id: "legal-terms",
+          label: t("nav.legalTerms", "Terms & conditions"),
+        },
+      ],
+    },
+    {
+      id: "accessibility",
+      label: t("nav.accessibility", "Accessibility"),
+      icon: AccessibilityIcon,
+      collapsible: false,
+      items: [
+        {
+          id: "accessibility",
+          label: t("nav.accessibility", "Accessibility"),
+        },
+      ],
+    },
+  ]
+
+  const [openSections, setOpenSections] = useState<Record<NavSectionId, boolean>>({
+    dashboard: true,
+    assets: false,
+    legal: false,
+    accessibility: true,
+  })
+
+  function toggleSection(id: NavSectionId) {
+    setOpenSections((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
+  }
 
   return (
     <>
       <nav className="mb-6 space-y-1">
-        <SidebarItem
-          label={t("nav.dashboard", "Dashboard")}
-          active={activeRoute === "dashboard"}
-          onClick={() => onNavigate("dashboard")}
-        />
-        <SidebarItem
-          label={t("nav.information", "Information")}
-          active={activeRoute === "information"}
-          onClick={() => onNavigate("information")}
-        />
-        <SidebarItem
-          label={t("nav.accessibility", "Accessibility")}
-          active={activeRoute === "accessibility"}
-          onClick={() => onNavigate("accessibility")}
-        />
-        <SidebarItem
-          label={t("nav.imprint", "Imprint")}
-          active={activeRoute === "imprint"}
-          onClick={() => onNavigate("imprint")}
-        />
+        {sections.map((section) => {
+          const Icon = section.icon
+
+          if (!section.collapsible) {
+            // Accessibility – single, non-collapsible item with icon.
+            const item = section.items[0]
+            const isActive = activeRoute === item.id
+
+            return (
+              <div key={section.id} className="space-y-0.5">
+                <SidebarItem
+                  label={section.label}
+                  active={isActive}
+                  onClick={() => onNavigate(item.id)}
+                  icon={<Icon className="h-4 w-4" aria-hidden="true" />}
+                />
+              </div>
+            )
+          }
+
+          const isAnyChildActive = section.items.some(
+            (item) => item.id === activeRoute,
+          )
+          const isOpen = openSections[section.id]
+
+          return (
+            <div key={section.id} className="space-y-0.5">
+              {/* Section header with icon + chevron */}
+              <button
+                type="button"
+                onClick={() => toggleSection(section.id)}
+                className={cn(
+                  "flex w-full items-center rounded-md px-2 py-1.5 text-sm transition hover:bg-accent hover:text-accent-foreground",
+                  isAnyChildActive && "bg-accent text-accent-foreground",
+                )}
+                aria-expanded={isOpen}
+              >
+                <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
+                <span className="flex-1 text-left">{section.label}</span>
+                <ChevronRight
+                  className={cn(
+                    "h-3 w-3 transition-transform",
+                    isOpen && "rotate-90",
+                  )}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {/* Sub-items */}
+              {isOpen && (
+                <div className="mt-0.5 space-y-0.5">
+                  {section.items.map((item) => {
+                    const isActive = activeRoute === item.id
+                    return (
+                      <SidebarItem
+                        key={item.id}
+                        label={item.label}
+                        active={isActive}
+                        onClick={() => onNavigate(item.id)}
+                        className="pl-7 text-sm"
+                      />
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })}
       </nav>
 
       <div className="mt-auto space-y-2 border-t pt-4 text-xs text-muted-foreground">
@@ -148,42 +302,56 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
         <p>
           {t(
             "nav.infoBody",
-            "No real customer data. Public Coinbase API only."
+            "No real customer data. Public Coinbase API only.",
           )}
         </p>
       </div>
     </>
-  );
+  )
 }
 
 type SidebarItemProps = {
-  label: string;
-  active?: boolean;
-  onClick?: () => void;
-};
+  label: string
+  active?: boolean
+  onClick?: () => void
+  className?: string
+  icon?: ReactNode
+}
 
-function SidebarItem({ label, active, onClick }: SidebarItemProps) {
+function SidebarItem({
+  label,
+  active,
+  onClick,
+  className,
+  icon,
+}: SidebarItemProps) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
         "flex w-full items-center rounded-md px-2 py-1.5 text-sm transition hover:bg-accent hover:text-accent-foreground",
-        active && "bg-accent text-accent-foreground"
+        active && "bg-accent text-accent-foreground",
+        className,
       )}
     >
+      {icon && (
+        <span className="mr-2 inline-flex h-4 w-4 items-center justify-center">
+          {icon}
+        </span>
+      )}
       <span className="truncate">{label}</span>
     </button>
-  );
+  )
 }
 
 function HeaderLanguageToggle() {
-  const { i18n } = useTranslation();
-  const isDe = i18n.language.startsWith("de");
-  const currentLang = isDe ? "de" : "en";
+  const { i18n } = useTranslation()
+  const isDe = i18n.language.startsWith("de")
+  const currentLang = isDe ? "de" : "en"
 
   function toggleLanguage() {
-    void i18n.changeLanguage(currentLang === "de" ? "en" : "de");
+    void i18n.changeLanguage(currentLang === "de" ? "en" : "de")
   }
 
   return (
@@ -198,131 +366,12 @@ function HeaderLanguageToggle() {
     >
       {currentLang === "de" ? "DE" : "EN"}
     </Button>
-  );
+  )
 }
 
-/* function ThemeToggleButton() {
-  const { t } = useTranslation();
-  const { theme, setTheme } = useAccessibilityStore();
-
-  function handleClick() {
-    const next =
-      theme === "light" ? "dark" : theme === "dark" ? "contrast" : "light";
-    setTheme(next);
-  }
-
-  const srLabel =
-    theme === "light"
-      ? t("a11y.toggleThemeToDark", "Switch to dark mode")
-      : theme === "dark"
-      ? t("a11y.toggleThemeToContrast", "Switch to high contrast mode")
-      : t("a11y.toggleThemeToLight", "Switch to light mode");
-
-  return (
-    <button
-      type="button"
-      onClick={handleClick}
-      title={t("a11y.themeToggleTitle", "Toggle theme")}
-      className="inline-flex size-8 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 group/toggle"
-    >
-      {}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="size-6"
-        aria-hidden="true"
-      >
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-        <path d="M12 3l0 18" />
-        <path d="M12 9l4.65 -4.65" />
-        <path d="M12 14.3l7.37 -7.37" />
-        <path d="M12 19.6l8.85 -8.85" />
-      </svg>
-      <span className="sr-only">{srLabel}</span>
-    </button>
-  );
-} */
-
-/* function ThemeToggleButtonVariant1() {
-  const { t } = useTranslation();
-  const { theme, setTheme } = useAccessibilityStore();
-
-  function handleClick() {
-    const next =
-      theme === "light" ? "dark" : theme === "dark" ? "contrast" : "light";
-    setTheme(next);
-  }
-
-  const srLabel =
-    theme === "light"
-      ? t("a11y.toggleThemeToDark", "Switch to dark mode")
-      : theme === "dark"
-      ? t("a11y.toggleThemeToContrast", "Switch to high contrast mode")
-      : t("a11y.toggleThemeToLight", "Switch to light mode");
-
-  const Icon =
-    theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon;
-
-  return (
-    <Button
-      type="button"
-      variant="outline"
-      size="icon"
-      onClick={handleClick}
-      title={t("a11y.themeToggleTitle", "Toggle theme")}
-    >
-      <Icon className="h-4 w-4" aria-hidden="true" />
-      <span className="sr-only">{srLabel}</span>
-    </Button>
-  );
-} */
-
-/* function ThemeToggleButtonVariant2() {
-  const { t } = useTranslation();
-  const { theme, setTheme } = useAccessibilityStore();
-
-  function handleClick() {
-    const next =
-      theme === "light" ? "dark" : theme === "dark" ? "contrast" : "light";
-    setTheme(next);
-  }
-
-  const srLabel =
-    theme === "light"
-      ? t("a11y.toggleThemeToDark", "Switch to dark mode")
-      : theme === "dark"
-      ? t("a11y.toggleThemeToContrast", "Switch to high contrast mode")
-      : t("a11y.toggleThemeToLight", "Switch to light mode");
-
-  const Icon =
-    theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon;
-
-  return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon"
-      onClick={handleClick}
-      title={t("a11y.themeToggleTitle", "Toggle theme")}
-      className="hover:bg-accent hover:text-accent-foreground"
-    >
-      <Icon className="h-4 w-4" aria-hidden="true" />
-      <span className="sr-only">{srLabel}</span>
-    </Button>
-  );
-} */
-
 function ThemeToggleButtonVariant3() {
-  const { t } = useTranslation();
-  const { theme, setTheme } = useAccessibilityStore();
+  const { t } = useTranslation()
+  const { theme, setTheme } = useAccessibilityStore()
 
   function handleClick() {
     const next =
@@ -332,8 +381,8 @@ function ThemeToggleButtonVariant3() {
         ? "contrast"
         : theme === "contrast"
         ? "contrastLight"
-        : "light"; // contrastLight -> light
-    setTheme(next);
+        : "light" // contrastLight -> light
+    setTheme(next)
   }
 
   const srLabel =
@@ -344,12 +393,12 @@ function ThemeToggleButtonVariant3() {
       : theme === "contrast"
       ? t(
           "a11y.toggleThemeToContrastLight",
-          "Switch to high contrast light mode"
+          "Switch to high contrast light mode",
         )
-      : t("a11y.toggleThemeToLight", "Switch to light mode");
+      : t("a11y.toggleThemeToLight", "Switch to light mode")
 
   const Icon =
-    theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon;
+    theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon
 
   return (
     <Button
@@ -369,7 +418,7 @@ function ThemeToggleButtonVariant3() {
       )}
       <span className="sr-only">{srLabel}</span>
     </Button>
-  );
+  )
 }
 
 // Simple inline icons
@@ -393,7 +442,7 @@ function SunIcon(props: React.SVGProps<SVGSVGElement>) {
       <path d="M5 19l1.5-1.5" />
       <path d="M17.5 6.5L19 5" />
     </svg>
-  );
+  )
 }
 
 function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -407,7 +456,7 @@ function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
     >
       <path d="M21 12.79A9 9 0 0 1 12 3a7 7 0 0 0 0 14 9 9 0 0 0 9-4.21Z" />
     </svg>
-  );
+  )
 }
 
 function ContrastIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -422,122 +471,5 @@ function ContrastIcon(props: React.SVGProps<SVGSVGElement>) {
       <circle cx="12" cy="12" r="9" />
       <path d="M12 3v18" />
     </svg>
-  );
+  )
 }
-
-/* function AccessibilitySection() {
-  const { t } = useTranslation();
-  const { theme, fontSize, fontFamily, setTheme, setFontSize, setFontFamily } =
-    useAccessibilityStore();
-
-  return (
-    <section aria-label={t("a11y.sectionTitle", "Accessibility settings")}>
-      <h2 className="mb-2 text-sm font-semibold uppercase text-muted-foreground">
-        {t("a11y.title", "Accessibility")}
-      </h2>
-
-      <div className="mb-3 space-y-1">
-        <p className="text-xs font-medium">{t("a11y.themeLabel", "Theme")}</p>
-        <div className="flex flex-wrap gap-1">
-          <Button
-            type="button"
-            variant={theme === "light" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTheme("light")}
-          >
-            {t("a11y.themeLight", "Light")}
-          </Button>
-          <Button
-            type="button"
-            variant={theme === "dark" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTheme("dark")}
-          >
-            {t("a11y.themeDark", "Dark")}
-          </Button>
-          <Button
-            type="button"
-            variant={theme === "contrast" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTheme("contrast")}
-          >
-            {t("a11y.themeContrastDark", "High contrast (dark)")}
-          </Button>
-          <Button
-            type="button"
-            variant={theme === "contrastLight" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTheme("contrastLight")}
-          >
-            {t("a11y.themeContrastLight", "High contrast (light)")}
-          </Button>
-        </div>
-      </div>
-
-      <div className="mb-3 space-y-1">
-        <p className="text-sm font-medium">
-          {t("a11y.fontSizeLabel", "Font size")}
-        </p>
-        <div className="flex gap-1">
-          <Button
-            type="button"
-            variant={fontSize === "sm" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFontSize("sm")}
-          >
-            A-
-          </Button>
-          <Button
-            type="button"
-            variant={fontSize === "md" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFontSize("md")}
-          >
-            A
-          </Button>
-          <Button
-            type="button"
-            variant={fontSize === "lg" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFontSize("lg")}
-          >
-            A+
-          </Button>
-        </div>
-      </div>
-
-      <div className="space-y-1">
-        <p className="text-sm font-medium">
-          {t("a11y.fontFamilyLabel", "Font family")}
-        </p>
-        <div className="flex flex-wrap gap-1">
-          <Button
-            type="button"
-            variant={fontFamily === "sans" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFontFamily("sans")}
-          >
-            {t("a11y.fontSystem", "Sans")}
-          </Button>
-          <Button
-            type="button"
-            variant={fontFamily === "serif" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFontFamily("serif")}
-          >
-            {t("a11y.fontSerif", "Serif")}
-          </Button>
-          <Button
-            type="button"
-            variant={fontFamily === "mono" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFontFamily("mono")}
-          >
-            {t("a11y.fontMono", "Mono")}
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
- */

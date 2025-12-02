@@ -6,10 +6,40 @@ const resources = {
     translation: {
       appTitle: "Project Picanha",
       nav: {
+        // Main sections
         dashboard: "Datenübersicht",
-        information: "Vermögenswerte",
+        assets: "Vermögenswerte",
+        legal: "Rechtliches",
         accessibility: "Barrierefreiheit",
+
+        // Old keys kept for compatibility
+        information: "Vermögenswerte",
         imprint: "Impressum",
+
+        // Dashboard sub-pages
+        dashboardOverview: "Übersicht",
+        dashboardAnalytics: "Analytics",
+        dashboardWatchlist: "Watchlist",
+
+        // Assets sub-pages
+        assetsOverview: "Übersicht",
+        assetsCrypto: "Krypto",
+        assetsFiat: "Fiat",
+
+        // Legal sub-pages
+        legalImprint: "Impressum",
+        legalPrivacy: "Datenschutz",
+        legalTerms: "Bedingungen",
+
+        // Misc nav labels
+        main: "Navigation",
+        current: "Aktuelle Ansicht",
+        subtitle: "React + Coinbase Sandbox",
+        openSidebar: "Navigation öffnen",
+        closeSidebar: "Navigation schließen",
+
+        infoTitle: "Nur Sandbox",
+        infoBody: "Keine echten Kundendaten. Nur öffentliche Coinbase-API.",
       },
       common: {
         loading: "Lädt…",
@@ -107,9 +137,29 @@ const resources = {
         highlightHeadingsDesc:
           "Fügt Überschriften einen dezenten Hintergrund und eine Markierung hinzu, um Abschnitte leichter zu scannen.",
       },
+      // Theme toggle SR texts etc.
+      a11y: {
+        themeToggleTitle: "Theme umschalten",
+        toggleThemeToDark: "In den Dunkelmodus wechseln",
+        toggleThemeToContrastDark:
+          "In den kontrastreichen Dunkelmodus wechseln",
+        toggleThemeToContrastLight:
+          "In den kontrastreichen Hellmodus wechseln",
+        toggleThemeToLight: "In den hellen Modus wechseln",
+      },
       imprint: {
         heading: "Impressum",
         body: "Dies ist eine rein fiktive Lernanwendung ohne Bezug zu echten Produkten oder Kundendaten.",
+      },
+      legal: {
+        privacy: {
+          heading: "Rechtliches – Datenschutz",
+          body: "Platzhalter-Seite für eine zukünftige Datenschutzerklärung. In einem echten Produkt würde hier eine DSGVO-konforme Datenschutzerklärung stehen.",
+        },
+        terms: {
+          heading: "Rechtliches – Bedingungen",
+          body: "Platzhalter-Seite für zukünftige Nutzungsbedingungen oder Vertragsinformationen.",
+        },
       },
       information: {
         heading: "Vermögenswerte",
@@ -126,10 +176,40 @@ const resources = {
     translation: {
       appTitle: "Project Picanha",
       nav: {
+        // Main sections
         dashboard: "Dashboard",
-        information: "Assets",
+        assets: "Assets",
+        legal: "Legal",
         accessibility: "Accessibility",
+
+        // Old keys kept for compatibility
+        information: "Assets",
         imprint: "Imprint",
+
+        // Dashboard sub-pages
+        dashboardOverview: "Overview",
+        dashboardAnalytics: "Analytics",
+        dashboardWatchlist: "Watchlist",
+
+        // Assets sub-pages
+        assetsOverview: "Overview",
+        assetsCrypto: "Crypto",
+        assetsFiat: "Fiat",
+
+        // Legal sub-pages
+        legalImprint: "Imprint",
+        legalPrivacy: "Privacy",
+        legalTerms: "Terms & conditions",
+
+        // Misc nav labels
+        main: "Navigation",
+        current: "Current view",
+        subtitle: "React + Coinbase sandbox",
+        openSidebar: "Open navigation",
+        closeSidebar: "Close navigation",
+
+        infoTitle: "Sandbox only",
+        infoBody: "No real customer data. Public Coinbase API only.",
       },
       common: {
         loading: "Loading…",
@@ -226,9 +306,28 @@ const resources = {
         highlightHeadingsDesc:
           "Add a subtle background and marker to headings to make sections easier to scan.",
       },
+      a11y: {
+        themeToggleTitle: "Toggle theme",
+        toggleThemeToDark: "Switch to dark mode",
+        toggleThemeToContrastDark:
+          "Switch to high contrast dark mode",
+        toggleThemeToContrastLight:
+          "Switch to high contrast light mode",
+        toggleThemeToLight: "Switch to light mode",
+      },
       imprint: {
         heading: "Imprint (Demo)",
         body: "This is a purely fictitious learning application with no relation to real products or customer data.",
+      },
+      legal: {
+        privacy: {
+          heading: "Legal – Privacy",
+          body: "Placeholder page for a future privacy notice. In a real product this would contain a full GDPR-compliant privacy policy.",
+        },
+        terms: {
+          heading: "Legal – Terms & conditions",
+          body: "Placeholder page for future terms & conditions or contract details.",
+        },
       },
       information: {
         heading: "Assets",
