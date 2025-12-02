@@ -17,8 +17,8 @@
 export interface CoinbaseExchangeRatesResponse {
   data: {
     // Base currency for the returned rates (e.g. "EUR", "USD").
-    currency: string
+    currency: string;
     // Map from symbol -> stringified rate (e.g. { "BTC": "0.000024" }).
-    rates: Record<string, string>
-  }
+    rates: Record<string, string>;
+  };
 }

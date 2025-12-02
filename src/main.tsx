@@ -1,9 +1,9 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
-import "./index.css"
-import "./i18n"
-import { ThemeProvider } from "./context/theme-context"
-import { App } from "./App"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import "./i18n";
+import { ThemeProvider } from "./context/theme-context";
+import { App } from "./App";
 
 // Entry point for the React application.
 //
@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       {/* App contains the actual application shell and all pages (dashboard, info, etc.). */}
       <App />
     </ThemeProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
