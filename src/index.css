@@ -91,6 +91,41 @@
   font-size: 1.125rem; /* 18px */
 }
 
+/* === Phase 1 accessibility extras ======================================= */
+
+/* Reduced motion:
+   Switch off most transitions/animations to support users who are sensitive to motion.
+   This is a coarse global flag; individual components can opt-out if needed. */
+.app-reduced-motion {
+  scroll-behavior: auto;
+}
+
+.app-reduced-motion *,
+.app-reduced-motion *::before,
+.app-reduced-motion *::after {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+}
+
+/* High-visibility links:
+   Make links clearly distinguishable from surrounding text
+   (supports WCAG "Use of Color" and link clarity). */
+.app-high-vis-links a {
+  text-decoration: underline;
+  text-decoration-thickness: 0.125em;
+  text-underline-offset: 0.2em;
+}
+
+/* Strong focus outlines:
+   Emphasise focus for keyboard users. We do NOT provide an option to disable focus outlines. */
+.app-strong-focus *:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 3px;
+}
+
+/* ======================================================================== */
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
