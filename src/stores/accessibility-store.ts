@@ -8,25 +8,34 @@ export type ThemeMode = "light" | "dark" | "contrast" | "contrastLight"
 export type FontSize = "sm" | "md" | "lg"
 
 // Global font-family options; the concrete stacks are defined in CSS.
-export type FontFamily = "sans" | "serif" | "mono"
+export type FontFamily = "sans" | "serif" | "mono" | "highLegibility"
+
+// Line-height presets for text spacing.
+export type LineHeight = "normal" | "relaxed" | "loose"
 
 interface AccessibilityState {
   theme: ThemeMode
   fontSize: FontSize
   fontFamily: FontFamily
+  lineHeight: LineHeight
 
-  // New phase 1 toggles
+  // Phase 1 toggles
   reducedMotion: boolean
   highVisibilityLinks: boolean
   strongFocusOutline: boolean
 
+  // Phase 2 toggle
+  highlightHeadings: boolean
+
   setTheme: (theme: ThemeMode) => void
   setFontSize: (size: FontSize) => void
   setFontFamily: (family: FontFamily) => void
+  setLineHeight: (spacing: LineHeight) => void
 
   setReducedMotion: (enabled: boolean) => void
   setHighVisibilityLinks: (enabled: boolean) => void
   setStrongFocusOutline: (enabled: boolean) => void
+  setHighlightHeadings: (enabled: boolean) => void
 }
 
 // Central store for accessibility-related UI preferences.
@@ -38,11 +47,15 @@ export const useAccessibilityStore = create<AccessibilityState>((set) => ({
   theme: "light",
   fontSize: "md",
   fontFamily: "sans",
+  lineHeight: "normal",
 
   // Phase 1 extras: all off by default
   reducedMotion: false,
   highVisibilityLinks: false,
   strongFocusOutline: false,
+
+  // Phase 2: heading highlight off by default
+  highlightHeadings: false,
 
   setTheme(theme) {
     set({ theme })
@@ -56,6 +69,10 @@ export const useAccessibilityStore = create<AccessibilityState>((set) => ({
     set({ fontFamily })
   },
 
+  setLineHeight(lineHeight) {
+    set({ lineHeight })
+  },
+
   setReducedMotion(reducedMotion) {
     set({ reducedMotion })
   },
@@ -66,5 +83,9 @@ export const useAccessibilityStore = create<AccessibilityState>((set) => ({
 
   setStrongFocusOutline(strongFocusOutline) {
     set({ strongFocusOutline })
+  },
+
+  setHighlightHeadings(highlightHeadings) {
+    set({ highlightHeadings })
   },
 }))

@@ -77,6 +77,14 @@
     monospace;
 }
 
+/* High-legibility font:
+   Uses Atkinson Hyperlegible if you add it to /public/fonts and wire @font-face.
+   Falls back to the system sans stack if the custom font is not available. */
+.app-font-highLegibility {
+  font-family: "Atkinson Hyperlegible", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
 /* Font sizes – these affect EVERYTHING inside the root container, including numbers */
 
 .app-font-size-sm {
@@ -91,11 +99,28 @@
   font-size: 1.125rem; /* 18px */
 }
 
+/* Line-height presets – text spacing
+   We apply them to <body> via a class on <html>.
+   Tailwind's preflight sets body line-height, so we need to override that. */
+
+/* Default / normal spacing */
+.app-line-normal body {
+  line-height: 1.5;
+}
+
+/* Slightly more relaxed text spacing */
+.app-line-relaxed body {
+  line-height: 1.75;
+}
+
+/* Maximum spacing for users who need more separation between lines */
+.app-line-loose body {
+  line-height: 2;
+}
+
 /* === Phase 1 accessibility extras ======================================= */
 
-/* Reduced motion:
-   Switch off most transitions/animations to support users who are sensitive to motion.
-   This is a coarse global flag; individual components can opt-out if needed. */
+/* Reduced motion */
 .app-reduced-motion {
   scroll-behavior: auto;
 }
@@ -108,20 +133,27 @@
   transition-duration: 0.001s !important;
 }
 
-/* High-visibility links:
-   Make links clearly distinguishable from surrounding text
-   (supports WCAG "Use of Color" and link clarity). */
+/* High-visibility links */
 .app-high-vis-links a {
   text-decoration: underline;
   text-decoration-thickness: 0.125em;
   text-underline-offset: 0.2em;
 }
 
-/* Strong focus outlines:
-   Emphasise focus for keyboard users. We do NOT provide an option to disable focus outlines. */
+/* Strong focus outlines */
 .app-strong-focus *:focus-visible {
   outline: 3px solid var(--color-ring);
   outline-offset: 3px;
+}
+
+/* Highlight headings – support users who scan by headings.
+   Keep it subtle but clearly distinguishable. */
+.app-highlight-headings h1,
+.app-highlight-headings h2,
+.app-highlight-headings h3 {
+  background-color: color-mix(in oklch, var(--color-muted) 80%, transparent);
+  padding-inline: 0.35rem;
+  border-left: 3px solid var(--color-accent);
 }
 
 /* ======================================================================== */

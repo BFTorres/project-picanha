@@ -20,6 +20,7 @@ export const ImprintPage: React.FC = () => {
         Trackingtools. Die dargestellten Kurse stammen aus der öffentlichen
         Coinbase-API und dienen ausschließlich Lernzwecken.
       </p>
+      <a href="https://github.com/BFTorres/project-picanha" className="text-primary underline-offset-4">GitHub repo</a>
     </section>
   )
 }

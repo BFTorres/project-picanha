@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next"
+
 import { useAccessibilityStore } from "@/stores/accessibility-store"
+
 import {
   Card,
   CardContent,
@@ -22,15 +24,19 @@ export function AccessibilityPage() {
     theme,
     fontSize,
     fontFamily,
+    lineHeight,
     reducedMotion,
     highVisibilityLinks,
     strongFocusOutline,
+    highlightHeadings,
     setTheme,
     setFontSize,
     setFontFamily,
+    setLineHeight,
     setReducedMotion,
     setHighVisibilityLinks,
     setStrongFocusOutline,
+    setHighlightHeadings,
   } = useAccessibilityStore()
 
   const currentLang = i18n.language?.startsWith("de") ? "de" : "en"
@@ -173,7 +179,7 @@ export function AccessibilityPage() {
             <CardDescription>
               {t(
                 "accessibility.typographyDescription",
-                "Control font size and typeface. These settings affect both text and numbers.",
+                "Control font size, typeface and spacing. These settings affect both text and numbers.",
               )}
             </CardDescription>
           </CardHeader>
@@ -216,7 +222,9 @@ export function AccessibilityPage() {
               <RadioGroup
                 value={fontFamily}
                 onValueChange={(value) =>
-                  setFontFamily(value as Parameters<typeof setFontFamily>[0])
+                  setFontFamily(
+                    value as Parameters<typeof setFontFamily>[0],
+                  )
                 }
                 className="flex flex-wrap gap-2"
               >
@@ -238,6 +246,56 @@ export function AccessibilityPage() {
                   label={t("accessibility.fontFamilyMono", "Monospace")}
                   sample="Aa"
                 />
+                <FamilyOption
+                  id="font-family-highLegibility"
+                  value="highLegibility"
+                  label={t(
+                    "accessibility.fontFamilyHighLegibility",
+                    "High-legibility",
+                  )}
+                  sample="Aa"
+                />
+              </RadioGroup>
+            </div>
+
+            {/* Line spacing */}
+            <div className="space-y-2">
+              <Label className="text-xs uppercase text-muted-foreground">
+                {t("accessibility.lineHeightLabel", "Line spacing")}
+              </Label>
+              <RadioGroup
+                value={lineHeight}
+                onValueChange={(value) =>
+                  setLineHeight(
+                    value as Parameters<typeof setLineHeight>[0],
+                  )
+                }
+                className="flex flex-wrap gap-2"
+              >
+                <SizeOption
+                  id="line-normal"
+                  value="normal"
+                  label={t(
+                    "accessibility.lineHeightNormal",
+                    "Normal",
+                  )}
+                />
+                <SizeOption
+                  id="line-relaxed"
+                  value="relaxed"
+                  label={t(
+                    "accessibility.lineHeightRelaxed",
+                    "Relaxed",
+                  )}
+                />
+                <SizeOption
+                  id="line-loose"
+                  value="loose"
+                  label={t(
+                    "accessibility.lineHeightLoose",
+                    "Loose",
+                  )}
+                />
               </RadioGroup>
             </div>
           </CardContent>
@@ -252,7 +310,7 @@ export function AccessibilityPage() {
             <CardDescription>
               {t(
                 "accessibility.interactionDescription",
-                "Control motion, link appearance and focus outlines to better suit your needs.",
+                "Control motion, link appearance, focus outlines and headings to better suit your needs.",
               )}
             </CardDescription>
           </CardHeader>
@@ -297,6 +355,21 @@ export function AccessibilityPage() {
               )}
               checked={strongFocusOutline}
               onCheckedChange={setStrongFocusOutline}
+            />
+
+            {/* Highlight headings */}
+            <ToggleRow
+              id="highlight-headings"
+              label={t(
+                "accessibility.highlightHeadingsLabel",
+                "Highlight headings",
+              )}
+              description={t(
+                "accessibility.highlightHeadingsDesc",
+                "Add a subtle background and border to headings to make sections easier to scan.",
+              )}
+              checked={highlightHeadings}
+              onCheckedChange={setHighlightHeadings}
             />
           </CardContent>
         </Card>

@@ -1,3 +1,4 @@
+// src/hooks/useAccessibilityEffects.ts
 import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useAccessibilityStore } from "@/stores/accessibility-store"
@@ -11,9 +12,11 @@ export function useAccessibilityEffects() {
     theme,
     fontSize,
     fontFamily,
+    lineHeight,
     reducedMotion,
     highVisibilityLinks,
     strongFocusOutline,
+    highlightHeadings,
   } = useAccessibilityStore()
 
   const { i18n } = useTranslation()
@@ -40,10 +43,9 @@ export function useAccessibilityEffects() {
 
     root.classList.add(themeClass)
 
-    // If you rely on Tailwind's `.dark` class for tokens,
-    // keep this in sync with the current theme.
+    // Tailwind dark tokens flag
     const shouldUseDarkTokens =
-      theme === "dark" || theme === "contrast" // contrast uses dark base
+      theme === "dark" || theme === "contrast"
     root.classList.toggle("dark", shouldUseDarkTokens)
 
     // --- Font size ----------------------------------------------------------
@@ -55,8 +57,21 @@ export function useAccessibilityEffects() {
     root.classList.add(`app-font-size-${fontSize}`)
 
     // --- Font family --------------------------------------------------------
-    root.classList.remove("app-font-sans", "app-font-serif", "app-font-mono")
+    root.classList.remove(
+      "app-font-sans",
+      "app-font-serif",
+      "app-font-mono",
+      "app-font-highLegibility",
+    )
     root.classList.add(`app-font-${fontFamily}`)
+
+    // --- Line height / text spacing ----------------------------------------
+    root.classList.remove(
+      "app-line-normal",
+      "app-line-relaxed",
+      "app-line-loose",
+    )
+    root.classList.add(`app-line-${lineHeight}`)
 
     // --- Reduced motion -----------------------------------------------------
     root.classList.toggle("app-reduced-motion", reducedMotion)
@@ -67,8 +82,10 @@ export function useAccessibilityEffects() {
     // --- Strong focus outline ----------------------------------------------
     root.classList.toggle("app-strong-focus", strongFocusOutline)
 
+    // --- Highlight headings -------------------------------------------------
+    root.classList.toggle("app-highlight-headings", highlightHeadings)
+
     // --- Language of page (WCAG 3.1.1) -------------------------------------
-    // Ensure <html lang="…"> reflects the currently active UI language.
     const lang =
       i18n.language && i18n.language.length > 1
         ? i18n.language.slice(0, 2)
@@ -78,9 +95,11 @@ export function useAccessibilityEffects() {
     theme,
     fontSize,
     fontFamily,
+    lineHeight,
     reducedMotion,
     highVisibilityLinks,
     strongFocusOutline,
+    highlightHeadings,
     i18n.language,
   ])
 }
