@@ -92,7 +92,7 @@ export function AppLayout({
       {/* Mobile sidebar overlay */}
       {mobileSidebarOpen && (
         <div className="fixed inset-0 z-40 flex md:hidden">
-          <div className="flex w-64 flex-col border-r bg-muted/40 p-4">
+          <div className="flex w-64 flex-col border-r bg-background p-4 shadow-lg">
             <SidebarContent
               activeRoute={activeRoute}
               onNavigate={handleNavigate}
