@@ -12,12 +12,11 @@
 /* Theme shells – you can wire Tailwind utilities using @apply if desired */
 
 .app-theme-light {
-  /* Usually nothing special if Tailwind "light" is default */
 
 }
 
 .app-theme-dark {
-  /* If you use Tailwind dark mode, you can map it, or add your own tokens */
+
 }
 
 .app-theme-contrast {

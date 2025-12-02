@@ -356,7 +356,7 @@ function HeaderLanguageToggle() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="sm"
       type="button"
       onClick={toggleLanguage}
@@ -403,7 +403,7 @@ function ThemeToggleButtonVariant3() {
   return (
     <Button
       type="button"
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={handleClick}
       title={t("a11y.themeToggleTitle", "Toggle theme")}
