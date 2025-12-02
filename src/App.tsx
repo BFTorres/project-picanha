@@ -7,9 +7,7 @@ import { useAccessibilityEffects } from "@/hooks/useAccessibilityEffects";
 import { AccessibilityPage } from "./pages/AccessibilityPage";
 import { InformationPage } from "./pages/InformationPage";
 
-/* export type AppRoute = ViewId */
-
-function App() {
+export function App() {
   const [route, setRoute] = useState<ViewId>("dashboard");
 
   useAccessibilityEffects();
@@ -30,5 +28,3 @@ function App() {
     </AppLayout>
   );
 }
-
-export default App;

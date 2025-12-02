@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Select,
@@ -21,7 +20,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useCoinbaseStore } from "@/stores/coinbase-store"
-
 type ChartPoint = {
   time: string
   price: number
