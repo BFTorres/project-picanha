@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCoinbaseStore } from "@/stores/coinbase-store";
+import { SectionCards } from "@/components/portfolio/SectionCards";
+import { PerformanceChart } from "@/components/portfolio/PerformanceChart";
 
 export function PortfolioPage() {
   const { t } = useTranslation();
@@ -24,6 +26,13 @@ export function PortfolioPage() {
             "Übersicht über deine Vermögenswerte und letzten Aktivitäten."
           )}
         </p>
+      </div>
+      <SectionCards />
+
+      <div className="grid gap-4 lg:grid-cols-1">
+        <div className="lg:col-span-2 space-y-4">
+          <PerformanceChart />
+        </div>
       </div>
 
     </div>
