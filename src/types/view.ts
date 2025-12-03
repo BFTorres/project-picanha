@@ -10,6 +10,7 @@ export type ViewId =
   | "dashboard-overview"
   | "dashboard-analytics"
   | "dashboard-watchlist"
+  | "portfolio"
   | "assets-overview"
   | "assets-crypto"
   | "assets-fiat"

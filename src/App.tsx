@@ -6,6 +6,7 @@ import type { ViewId } from "@/types/view";
 import { useAccessibilityEffects } from "@/hooks/useAccessibilityEffects";
 import { AccessibilityPage } from "./pages/AccessibilityPage";
 import { InformationPage } from "./pages/InformationPage";
+import { PortfolioPage } from "./pages/PortfolioPage";
 import { DashboardAnalyticsPage } from "./pages/DashboardAnalyticsPage";
 import { DashboardWatchlistPage } from "./pages/DashboardWatchlistPage";
 import { AssetsCryptoPage } from "./pages/AssetsCryptoPage";
@@ -37,6 +38,11 @@ export function App() {
       break;
     case "dashboard-watchlist":
       content = <DashboardWatchlistPage />;
+      break;
+
+    // Portfolio group
+    case "portfolio":
+      content = <PortfolioPage />;
       break;
 
     // Assets group

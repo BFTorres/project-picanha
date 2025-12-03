@@ -13,6 +13,7 @@ import {
   Scale,
   Accessibility as AccessibilityIcon,
   ChevronRight,
+  Wallet,
 } from "lucide-react"
 
 type AppLayoutProps = {
@@ -118,7 +119,7 @@ type SidebarContentProps = {
 function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
   const { t } = useTranslation()
 
-  type NavSectionId = "dashboard" | "assets" | "legal" | "accessibility"
+  type NavSectionId = "dashboard" | "portfolio" | "assets" | "legal" | "accessibility"
 
   interface NavItemConfig {
     id: ViewId
@@ -153,6 +154,18 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
         {
           id: "dashboard-watchlist",
           label: t("nav.dashboardWatchlist", "Watchlist"),
+        },
+      ],
+    },
+    {
+      id: "portfolio",
+      label: t("nav.portfolio", "Portfolio"),
+      icon: Wallet,
+      collapsible: false,
+      items: [
+        {
+          id: "portfolio",
+          label: t("nav.portfolio", "Portfolio"),
         },
       ],
     },
@@ -212,6 +225,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
 
   const [openSections, setOpenSections] = useState<Record<NavSectionId, boolean>>({
     dashboard: true,
+    portfolio: true,
     assets: false,
     legal: false,
     accessibility: true,
@@ -378,10 +392,10 @@ function ThemeToggleButtonVariant3() {
       theme === "light"
         ? "dark"
         : theme === "dark"
-        ? "contrast"
-        : theme === "contrast"
-        ? "contrastLight"
-        : "light" // contrastLight -> light
+          ? "contrast"
+          : theme === "contrast"
+            ? "contrastLight"
+            : "light" // contrastLight -> light
     setTheme(next)
   }
 
@@ -389,13 +403,13 @@ function ThemeToggleButtonVariant3() {
     theme === "light"
       ? t("a11y.toggleThemeToDark", "Switch to dark mode")
       : theme === "dark"
-      ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
-      : theme === "contrast"
-      ? t(
-          "a11y.toggleThemeToContrastLight",
-          "Switch to high contrast light mode",
-        )
-      : t("a11y.toggleThemeToLight", "Switch to light mode")
+        ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
+        : theme === "contrast"
+          ? t(
+            "a11y.toggleThemeToContrastLight",
+            "Switch to high contrast light mode",
+          )
+          : t("a11y.toggleThemeToLight", "Switch to light mode")
 
   const Icon =
     theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon

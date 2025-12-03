@@ -8,6 +8,7 @@ const resources = {
       nav: {
         // Main sections
         dashboard: "Datenübersicht",
+        portfolio: "Portfolio",
         assets: "Vermögenswerte",
         legal: "Rechtliches",
         accessibility: "Barrierefreiheit",
@@ -63,6 +64,10 @@ const resources = {
           currentLabel: "Aktueller Kurs",
           changeLabel: "Veränderung über den Zeitraum",
         },
+      },
+      portfolio: {
+        heading: "Portfolio",
+        description: "Übersicht über deine Vermögenswerte und letzten Aktivitäten.",
       },
       settings: {
         heading: "Einstellungen & Barrierefreiheit",
@@ -178,6 +183,7 @@ const resources = {
       nav: {
         // Main sections
         dashboard: "Dashboard",
+        portfolio: "Portfolio",
         assets: "Assets",
         legal: "Legal",
         accessibility: "Accessibility",
@@ -232,6 +238,10 @@ const resources = {
           currentLabel: "Current price",
           changeLabel: "Change over period",
         },
+      },
+      portfolio: {
+        heading: "Portfolio",
+        description: "Overview of your assets and recent activity.",
       },
       settings: {
         heading: "Settings & Accessibility",
