@@ -1,6 +1,6 @@
 // src/components/dashboard/SectionCards.tsx
 import { useTranslation } from "react-i18next"
-
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useCoinbaseStore } from "@/stores/coinbase-store"
 
@@ -21,14 +21,15 @@ export function SectionCards() {
         <CardContent>
           <p className="text-2xl font-semibold">5,700.00 {baseCurrency || "—"}</p>
           <thead>
-            <tr className="border-b bg-muted/40">
-              <th className="py-2 px-2 text-left text-muted-foreground">
-                {t("portfolio.table.activity", "Add Funds")}
-              </th>
-              <th className="py-2 px-2 text-right text-muted-foreground">
-                {t("portfolio.table.rate", "Withdraw Funds")}
-              </th>
-            </tr>
+            <div className="flex items-center gap-2">
+              <Button variant="default" >
+                Add Funds
+              </Button>
+
+              <Button variant="default" >
+                Withdraw Funds
+              </Button>
+            </div>
           </thead>
         </CardContent>
       </Card>
@@ -40,13 +41,9 @@ export function SectionCards() {
         </CardHeader>
         <CardContent>
           <p className="text-2xl font-semibold">4,300.00 {baseCurrency || "—"}</p>
-          <thead>
-            <tr className="border-b bg-muted/40">
-              <th className="py-2 px-2 text-left text-muted-foreground">
-                {t("portfolio.table.activity", "Picanha Trading")}
-              </th>
-            </tr>
-          </thead>
+          <Button variant="default">
+            To Picanha Trading
+          </Button>
         </CardContent>
       </Card>
       <Card>

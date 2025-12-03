@@ -1,12 +1,12 @@
 export const HistoryData = [
   {
     "id": "tx-33",
-    "date": "2025-12-01T14:03:22.852Z",
+    "date": "2023-12-01T14:03:22.852Z",
     "type": "buy",
-    "asset": "SOL",
-    "amount": 99.17737452040699,
-    "price": 134.22230628687944,
-    "total": 13311.81593960662,
+    "asset": "EUR",
+    "amount": 10000,
+    "price": 1,
+    "total": 10000,
     "status": "completed"
   },
   {
@@ -483,7 +483,7 @@ export const HistoryData = [
   id: string
   date: string
   type: "buy" | "sell"
-  asset: "BTC" | "SOL"
+  asset: "BTC" | "SOL" | "EUR"
   amount: number
   price: number
   total: number

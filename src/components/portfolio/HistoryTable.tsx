@@ -41,7 +41,7 @@ type Transaction = {
   id: string
   date: string
   type: "buy" | "sell"
-  asset: "BTC" | "SOL"
+  asset: "BTC" | "SOL" | "EUR"
   amount: number
   price: number
   total: number
@@ -114,9 +114,6 @@ export function HistoryTable() {
           <CardTitle className="text-base font-semibold">
             {t("dashboard.table.title", "Transaction History")}
           </CardTitle>
-          <p className="text-xs text-muted-foreground">
-            {t("dashboard.table.subtitle", "View your recent crypto activity")}
-          </p>
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -131,7 +128,7 @@ export function HistoryTable() {
                 )}
               >
                 <CalendarIcon className="mr-2 h-3 w-3" />
-                {from ? format(from, "yyyy-MM-dd") : "From"}
+                {from ? format(from, "dd/MM/yyyy") : "From"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="end">
@@ -155,7 +152,7 @@ export function HistoryTable() {
                 )}
               >
                 <CalendarIcon className="mr-2 h-3 w-3" />
-                {to ? format(to, "yyyy-MM-dd") : "To"}
+                {to ? format(to, "dd/MM/yyyy") : "To"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="end">
@@ -216,7 +213,7 @@ export function HistoryTable() {
                       onClick={() => openDetails(tx)}
                     >
                       <td className="py-2 pl-2 pr-4">
-                        {format(parseISO(tx.date), "yyyy-MM-dd HH:mm")}
+                        {format(parseISO(tx.date), "dd/MM/yyyy HH:mm")}
                       </td>
                       <td className="py-2 px-4 capitalize">
                         <span className={cn(
@@ -233,10 +230,10 @@ export function HistoryTable() {
                         {tx.amount.toFixed(6)}
                       </td>
                       <td className="py-2 px-4 text-right font-mono">
-                        ${tx.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        EUR {tx.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                       <td className="py-2 px-4 text-right font-mono font-medium">
-                        ${tx.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        EUR {tx.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))}
@@ -364,11 +361,11 @@ function TransactionDetailsSheet({
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Price per unit</span>
-              <span className="font-mono">${transaction.price.toLocaleString()}</span>
+              <span className="font-mono">EUR {transaction.price.toLocaleString()}</span>
             </div>
             <div className="border-t pt-2 mt-2 flex justify-between font-medium">
               <span>Total</span>
-              <span className="font-mono">${transaction.total.toLocaleString()}</span>
+              <span className="font-mono">EUR {transaction.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
