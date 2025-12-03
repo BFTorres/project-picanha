@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useCoinbaseStore } from "@/stores/coinbase-store";
 import { SectionCards } from "@/components/portfolio/SectionCards";
 import { PerformanceChart } from "@/components/portfolio/PerformanceChart";
+import { HistoryTable } from "@/components/portfolio/HistoryTable";
 
 export function PortfolioPage() {
   const { t } = useTranslation();
@@ -34,6 +35,7 @@ export function PortfolioPage() {
           <PerformanceChart />
         </div>
       </div>
+      <HistoryTable />
 
     </div>
   );
