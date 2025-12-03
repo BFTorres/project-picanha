@@ -1,11 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCoinbaseStore } from "@/stores/coinbase-store";
-import { SectionCards } from "@/components/dashboard/SectionCards";
-/* import { ChartArea } from "@/components/dashboard/ChartArea"; */
-import { RatesTable } from "@/components/dashboard/RatesTable";
-import { WatchlistPanel } from "@/components/dashboard/WatchlistPanel";
-import { PriceChart } from "@/components/dashboard/PriceChart";
 
 export function PortfolioPage() {
   const { t } = useTranslation();
