@@ -1,12 +1,12 @@
 export const HistoryData = [
   {
     "id": "tx-33",
-    "date": "2025-12-01T14:03:22.852Z",
+    "date": "2023-12-01T14:03:22.852Z",
     "type": "buy",
-    "asset": "SOL",
-    "amount": 99.17737452040699,
-    "price": 134.22230628687944,
-    "total": 13311.81593960662,
+    "asset": "EUR",
+    "amount": 10000,
+    "price": 1,
+    "total": 10000,
     "status": "completed"
   },
   {
@@ -452,11 +452,11 @@ export const HistoryData = [
   {
     "id": "tx-3",
     "date": "2025-10-06T13:04:10.852Z",
-    "type": "buy",
-    "asset": "BTC",
-    "amount": 0.36511199482625084,
-    "price": 66544.30688213244,
-    "total": 24296.124630065588,
+    "type": "sell",
+    "asset": "EUR",
+    "amount": 2000,
+    "price": 1,
+    "total": 2000,
     "status": "completed"
   },
   {
@@ -472,18 +472,18 @@ export const HistoryData = [
   {
     "id": "tx-26",
     "date": "2025-10-05T13:04:10.852Z",
-    "type": "sell",
-    "asset": "BTC",
-    "amount": 0.47773231680442185,
-    "price": 63702.32225472139,
-    "total": 30432.65799656993,
+    "type": "buy",
+    "asset": "EUR",
+    "amount": 10000,
+    "price": 1,
+    "total": 10000,
     "status": "completed"
   }
 ] satisfies readonly {
   id: string
   date: string
   type: "buy" | "sell"
-  asset: "BTC" | "SOL"
+  asset: "BTC" | "SOL" | "EUR"
   amount: number
   price: number
   total: number

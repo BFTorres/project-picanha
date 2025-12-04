@@ -1,12 +1,47 @@
 // src/components/dashboard/SectionCards.tsx
-import { useTranslation } from "react-i18next";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCoinbaseStore } from "@/stores/coinbase-store";
-
+import { useTranslation } from "react-i18next"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useCoinbaseStore } from "@/stores/coinbase-store"
+import { HistoryData } from "../data/HistoryData"
 export function SectionCards() {
-  const { t } = useTranslation();
-  const { baseCurrency } = useCoinbaseStore();
+  const { t } = useTranslation()
+  const { baseCurrency } = useCoinbaseStore()
+
+  let histData = HistoryData
+  const total = histData.length
+  let picanhaBalance = 0
+  let cryptoWalletBalance = 0
+
+  const formatter = new Intl.NumberFormat("de-DE", {
+    style: 'currency',
+    currency: baseCurrency,
+  });
+
+  for (let i = 0; i < total; i++) {
+    if (histData[i].asset === "EUR") {
+      if (histData[i].type === "buy") {
+        picanhaBalance += histData[i].total
+      } else {
+        picanhaBalance -= histData[i].total
+      }
+    }
+    else if (histData[i].type === "buy") {
+      picanhaBalance -= histData[i].total
+    } else {
+      picanhaBalance += histData[i].total
+    }
+  }
+  for (let i = 0; i < total; i++) {
+    if (histData[i].asset !== "EUR") {
+      if (histData[i].type === "buy") {
+        cryptoWalletBalance += histData[i].total
+      } else {
+        cryptoWalletBalance -= histData[i].total
+      }
+    }
+  }
+
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -17,18 +52,17 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold">
-            5,700.00 {baseCurrency || "—"}
-          </p>
+          <p className="text-2xl font-semibold">{formatter.format(picanhaBalance)}</p>
           <thead>
-            <tr className="border-b bg-muted/40">
-              <th className="py-2 px-2 text-left text-muted-foreground">
-                {t("portfolio.table.activity", "Add Funds")}
-              </th>
-              <th className="py-2 px-2 text-right text-muted-foreground">
-                {t("portfolio.table.rate", "Withdraw Funds")}
-              </th>
-            </tr>
+            <div className="flex items-center gap-2">
+              <Button variant="default" >
+                Add Funds
+              </Button>
+
+              <Button variant="default" >
+                Withdraw Funds
+              </Button>
+            </div>
           </thead>
         </CardContent>
       </Card>
@@ -39,16 +73,10 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold">
-            4,300.00 {baseCurrency || "—"}
-          </p>
-          <thead>
-            <tr className="border-b bg-muted/40">
-              <th className="py-2 px-2 text-left text-muted-foreground">
-                {t("portfolio.table.activity", "Picanha Trading")}
-              </th>
-            </tr>
-          </thead>
+          <p className="text-2xl font-semibold">{formatter.format(cryptoWalletBalance)} </p>
+          <Button variant="default">
+            To Picanha Trading
+          </Button>
         </CardContent>
       </Card>
       <Card>
@@ -58,11 +86,10 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold">
-            10,000.00 {baseCurrency || "—"}
-          </p>
+          <p className="text-2xl font-semibold">{formatter.format(picanhaBalance + cryptoWalletBalance)}</p>
+
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
