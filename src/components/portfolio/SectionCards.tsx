@@ -1,14 +1,12 @@
 // src/components/dashboard/SectionCards.tsx
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useCoinbaseStore } from "@/stores/coinbase-store"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCoinbaseStore } from "@/stores/coinbase-store";
 
 export function SectionCards() {
-  const { t } = useTranslation()
-  const { baseCurrency } = useCoinbaseStore()
-
-
+  const { t } = useTranslation();
+  const { baseCurrency } = useCoinbaseStore();
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -19,7 +17,9 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold">5,700.00 {baseCurrency || "—"}</p>
+          <p className="text-2xl font-semibold">
+            5,700.00 {baseCurrency || "—"}
+          </p>
           <thead>
             <tr className="border-b bg-muted/40">
               <th className="py-2 px-2 text-left text-muted-foreground">
@@ -39,7 +39,9 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold">4,300.00 {baseCurrency || "—"}</p>
+          <p className="text-2xl font-semibold">
+            4,300.00 {baseCurrency || "—"}
+          </p>
           <thead>
             <tr className="border-b bg-muted/40">
               <th className="py-2 px-2 text-left text-muted-foreground">
@@ -56,10 +58,11 @@ export function SectionCards() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-semibold">10,000.00 {baseCurrency || "—"}</p>
-
+          <p className="text-2xl font-semibold">
+            10,000.00 {baseCurrency || "—"}
+          </p>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
