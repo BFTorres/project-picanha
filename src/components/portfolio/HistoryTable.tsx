@@ -1,8 +1,13 @@
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { format, isWithinInterval, parseISO, startOfDay, endOfDay } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import dayjs from "dayjs"
+import isBetween from "dayjs/plugin/isBetween"
+import localizedFormat from "dayjs/plugin/localizedFormat"
 
+dayjs.extend(isBetween)
+dayjs.extend(localizedFormat)
+
+import { CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,7 +41,6 @@ import {
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 
-// JSON Data
 type Transaction = {
   id: string
   date: string
@@ -50,14 +54,73 @@ type Transaction = {
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20] as const
 
+type DateFilterProps = {
+  value: Date | undefined
+  onChange: (date: Date | undefined) => void
+  label: string
+}
+
+function DateFilter({ value, onChange, label }: DateFilterProps) {
+  const [open, setOpen] = useState(false)
+  const [tempDate, setTempDate] = useState<Date | undefined>()
+
+  return (
+    <Popover
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen)
+        if (isOpen) setTempDate(value)
+      }}
+    >
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            "h-8 px-2 text-xs justify-start text-left font-normal",
+            !value && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-3 w-3" />
+          {value ? dayjs(value).format("DD/MM/YYYY") : label}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="end">
+        <Calendar
+          mode="single"
+          selected={tempDate}
+          onSelect={setTempDate}
+          className="rounded-md border shadow-sm"
+          captionLayout="dropdown"
+        />
+        <div className="flex items-center justify-between p-3 border-t">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setTempDate(undefined)}
+          >
+            Clear
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => {
+              onChange(tempDate)
+              setOpen(false)
+            }}
+          >
+            Submit
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 export function HistoryTable() {
   const { t } = useTranslation()
-
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
-
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null)
 
@@ -66,11 +129,10 @@ export function HistoryTable() {
 
     if (from || to) {
       filtered = filtered.filter((tx) => {
-        const txDate = parseISO(tx.date)
-        return isWithinInterval(txDate, {
-          start: from ? startOfDay(from) : new Date(0),
-          end: to ? endOfDay(to) : new Date(),
-        })
+        const txDate = dayjs(tx.date)
+        const startDate = from ? dayjs(from).startOf("day") : dayjs(0)
+        const endDate = to ? dayjs(to).endOf("day") : dayjs()
+        return txDate.isBetween(startDate, endDate, null, "[]")
       })
     }
 
@@ -78,8 +140,7 @@ export function HistoryTable() {
     const pages = Math.max(1, Math.ceil(total / pageSize))
     const current = Math.min(Math.max(page, 1), pages)
     const start = (current - 1) * pageSize
-    const end = start + pageSize
-    const pageSlice = filtered.slice(start, end)
+    const pageSlice = filtered.slice(start, start + pageSize)
 
     return {
       rowsForPage: pageSlice,
@@ -89,89 +150,25 @@ export function HistoryTable() {
     }
   }, [from, to, page, pageSize])
 
-  function handlePageChange(nextPage: number) {
-    const clamped = Math.min(Math.max(nextPage, 1), pageCount)
-    setPage(clamped)
-  }
-
-  function handlePageSizeChange(value: string) {
-    const next = parseInt(value, 10)
-    if (!Number.isNaN(next)) {
-      setPageSize(next)
-      setPage(1)
-    }
-  }
-
-  function openDetails(tx: Transaction) {
-    setSelectedTx(tx)
-    setDetailsOpen(true)
-  }
-
   return (
     <Card>
       <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <CardTitle className="text-base font-semibold">
-            {t("dashboard.table.title", "Transaction History")}
-          </CardTitle>
-        </div>
+        <CardTitle className="text-base font-semibold">
+          {t("dashboard.table.title", "Transaction History")}
+        </CardTitle>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          {/* FROM PICKER */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "h-8 px-2 text-xs justify-start text-left font-normal",
-                  !from && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-3 w-3" />
-                {from ? format(from, "dd/MM/yyyy") : "From"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={from}
-                onSelect={setFrom}
-                className="rounded-md border shadow-sm"
-                captionLayout="dropdown"
-              />
-            </PopoverContent>
-          </Popover>
-
-          {/* TO PICKER */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "h-8 px-2 text-xs justify-start text-left font-normal",
-                  !to && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-3 w-3" />
-                {to ? format(to, "dd/MM/yyyy") : "To"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={to}
-                onSelect={setTo}
-                className="rounded-md border shadow-sm"
-                captionLayout="dropdown"
-              />
-            </PopoverContent>
-          </Popover>
+          <DateFilter value={from} onChange={setFrom} label="From" />
+          <DateFilter value={to} onChange={setTo} label="To" />
 
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>{t("dashboard.table.pageSizeLabel", "Rows per page")}</span>
             <Select
               value={String(pageSize)}
-              onValueChange={handlePageSizeChange}
+              onValueChange={(value) => {
+                setPageSize(parseInt(value, 10))
+                setPage(1)
+              }}
             >
               <SelectTrigger className="h-8 w-[70px] text-xs">
                 <SelectValue />
@@ -212,10 +209,13 @@ export function HistoryTable() {
                     <tr
                       key={tx.id}
                       className="cursor-pointer border-b last:border-0 hover:bg-muted"
-                      onClick={() => openDetails(tx)}
+                      onClick={() => {
+                        setSelectedTx(tx)
+                        setDetailsOpen(true)
+                      }}
                     >
                       <td className="py-2 pl-2 pr-4">
-                        {format(parseISO(tx.date), "dd/MM/yyyy HH:mm")}
+                        {dayjs(tx.date).format("DD/MM/YYYY HH:mm")}
                       </td>
                       <td className="py-2 px-4 capitalize">
                         <span className={cn(
@@ -257,7 +257,7 @@ export function HistoryTable() {
                         href="#"
                         onClick={(e) => {
                           e.preventDefault()
-                          if (safePage > 1) handlePageChange(safePage - 1)
+                          if (safePage > 1) setPage(safePage - 1)
                         }}
                         className={safePage === 1 ? "pointer-events-none opacity-50" : undefined}
                       />
@@ -273,7 +273,7 @@ export function HistoryTable() {
                               isActive={p === safePage}
                               onClick={(e) => {
                                 e.preventDefault()
-                                handlePageChange(p)
+                                setPage(p)
                               }}
                             >
                               {p}
@@ -291,7 +291,7 @@ export function HistoryTable() {
                         href="#"
                         onClick={(e) => {
                           e.preventDefault()
-                          if (safePage < pageCount) handlePageChange(safePage + 1)
+                          if (safePage < pageCount) setPage(safePage + 1)
                         }}
                         className={safePage === pageCount ? "pointer-events-none opacity-50" : undefined}
                       />
@@ -331,16 +331,14 @@ function TransactionDetailsSheet({
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>Transaction Details</SheetTitle>
-          <SheetDescription>
-            ID: {transaction.id}
-          </SheetDescription>
+          <SheetDescription>ID: {transaction.id}</SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-6">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Date</p>
-              <p className="font-medium">{format(parseISO(transaction.date), "PPP p")}</p>
+              <p className="font-medium">{dayjs(transaction.date).format("LLLL")}</p>
             </div>
             <div>
               <p className="text-muted-foreground">Type</p>
