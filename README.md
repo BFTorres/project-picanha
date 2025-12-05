@@ -3,7 +3,7 @@
 
 # project-picanha
 
-A small React + TypeScript learning project using Vite, Tailwind CSS v4, shadcn/ui, TanStack Query, react-i18next, and the public Coinbase API.
+A small React + TypeScript learning project using Vite, Tailwind CSS v4, shadcn/ui, Zustand, ~TanStack Query~, react-i18next, and the public Coinbase API.
 
 Goal:
 
@@ -99,13 +99,15 @@ This will install:
 
 - shadcn/ui (Radix-based UI components)
 
-- @tanstack/react-query
+- Zustand
+
+- ~@tanstack/react-query~
 
 - i18next + react-i18next
 
 - tslib
 
--Other tooling
+- Other tooling
 
 ### 2.3 Environment variables
 
@@ -396,16 +398,16 @@ Docs:
 
 - Radix UI: https://www.radix-ui.com/
 
-### 5.5 TanStack Query (React Query)
+### ~5.5 TanStack Query (React Query)~
 
 What it is:
 Library for managing server state (data from APIs) in React.
 
 How we use it:
 
-- In main.tsx: create a QueryClient and wrap the app with <QueryClientProvider>.
+- ~In main.tsx: create a QueryClient and wrap the app with <QueryClientProvider>.~
 
-- In CoinbaseRatesCard: useQuery to load exchange rates.
+- ~In CoinbaseRatesCard: useQuery to load exchange rates.~
 
 Why:
 
@@ -417,11 +419,11 @@ Why:
 
 Docs:
 
-- TanStack Query: https://tanstack.com/query
+- ~TanStack Query: https://tanstack.com/query~
 
-- React Query overview: https://tanstack.com/query/v5/docs/react/overview
+- ~React Query overview: https://tanstack.com/query/v5/docs/react/overview~
 
-- React Query quick start: https://tanstack.com/query/v5/docs/react/quick-start
+- ~React Query quick start: https://tanstack.com/query/v5/docs/react/quick-start~
 
 ### 5.6 i18next + react-i18next
 
@@ -587,11 +589,13 @@ Radix UI: https://www.radix-ui.com/
 
 ### State / data fetching:
 
-TanStack Query main site: https://tanstack.com/query
+Zustand: https://zustand.docs.pmnd.rs/getting-started/introduction
 
-React Query overview: https://tanstack.com/query/v5/docs/react/overview
+~TanStack Query main site: https://tanstack.com/query~
 
-React Query quick start: https://tanstack.com/query/v5/docs/react/quick-start
+~React Query overview: https://tanstack.com/query/v5/docs/react/overview~
+
+~React Query quick start: https://tanstack.com/query/v5/docs/react/quick-start~
 
 ### Internationalization:
 
@@ -619,7 +623,7 @@ Ideas for expanding the project while keeping it generic:
 
 - Implement add/edit/delete using React state.
 
-- Then move to a mock backend (JSON server) + TanStack Query mutations.
+- ~Then move to a mock backend (JSON server) + TanStack Query mutations.~
 
 2. Persist settings
 
