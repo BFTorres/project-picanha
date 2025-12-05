@@ -136,7 +136,8 @@ export function HistoryTable() {
                 mode="single"
                 selected={from}
                 onSelect={setFrom}
-                initialFocus
+                className="rounded-md border shadow-sm"
+                captionLayout="dropdown"
               />
             </PopoverContent>
           </Popover>
@@ -160,7 +161,8 @@ export function HistoryTable() {
                 mode="single"
                 selected={to}
                 onSelect={setTo}
-                initialFocus
+                className="rounded-md border shadow-sm"
+                captionLayout="dropdown"
               />
             </PopoverContent>
           </Popover>
