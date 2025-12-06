@@ -55,7 +55,7 @@ export function SectionCards() {
             {formatter.format(picanhaBalance)}
           </p>
 
-          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-1 xl:grid-cols-2">
             <Button variant="outline" className="w-full">
               {t("portfolio.cards.addFunds", "Add funds")}
             </Button>
