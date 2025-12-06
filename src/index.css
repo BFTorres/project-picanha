@@ -6,7 +6,8 @@
 /* App-level utility classes for theming / accessibility */
 
 .app-root {
-  @apply min-h-screen transition-colors duration-200;
+  @apply min-h-screen w-full overflow-x-hidden transition-colors duration-200;
+  overscroll-behavior: none;
 }
 
 /* Theme shells – you can wire Tailwind utilities using @apply if desired */
@@ -77,7 +78,7 @@
 /* Modern UI monospace stack (Tailwind-style) */
 .app-font-mono {
   font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas,
-  "Liberation Mono", "Courier New", monospace;
+    "Liberation Mono", "Courier New", monospace;
 }
 
 /* High-legibility font:
@@ -85,7 +86,7 @@
    Falls back to the system sans stack if the custom font is not available. */
 .app-font-highLegibility {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-  sans-serif;
+    sans-serif;
 }
 
 /* Font sizes – these affect EVERYTHING inside the root container, including numbers */
@@ -268,10 +269,22 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Kill Vite's default #root layout that causes horizontal overflow */
+#root {
+  @apply w-full max-w-full m-0 p-0;
+}
+
+/* Make sure the page itself never grows wider than the viewport */
 @layer base {
+  html,
+  body {
+    @apply w-full max-w-full overflow-x-hidden;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

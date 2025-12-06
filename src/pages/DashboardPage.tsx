@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCoinbaseStore } from "@/stores/coinbase-store";
 import { SectionCards } from "@/components/dashboard/SectionCards";
-/* import { ChartArea } from "@/components/dashboard/ChartArea"; */
 import { RatesTable } from "@/components/dashboard/RatesTable";
 import { WatchlistPanel } from "@/components/dashboard/WatchlistPanel";
 import { PriceChart } from "@/components/dashboard/PriceChart";
@@ -18,7 +17,7 @@ export function DashboardPage() {
   }, [fetchRates, lastUpdated]);
 
   return (
-    <div className="flex flex-1 flex-col gap-4 md:gap-6">
+    <div className="flex w-full min-w-0 flex-1 flex-col gap-4 md:gap-6">
       <div>
         <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
           {t("dashboard.title", "Crypto overview")}
@@ -34,11 +33,11 @@ export function DashboardPage() {
       <SectionCards />
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
+        <div className="min-w-0 lg:col-span-2 space-y-4">
           <PriceChart />
           <RatesTable />
         </div>
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <WatchlistPanel />
         </div>
       </div>

@@ -58,35 +58,54 @@ export const useInfoStore = create<InfoState>((set, get) => ({
   lastUpdated: null,
 
   async fetchAssets() {
-    // Optional optimisation: if we already loaded assets once, skip refetch.
-    // This keeps the UI snappy and avoids unnecessary API calls.
+    // Optional: skip refetch if we already loaded once
     if (get().assets.length > 0) return;
 
     set({ isLoading: true, error: null });
 
     try {
-      // Coinbase exposes public, unauthenticated endpoints for currencies.
       const [cryptoRes, fiatRes] = await Promise.all([
         fetch("https://api.coinbase.com/v2/currencies/crypto"),
         fetch("https://api.coinbase.com/v2/currencies"),
       ]);
 
-      if (!cryptoRes.ok || !fiatRes.ok) {
-        throw new Error(
-          `HTTP ${cryptoRes.status}/${fiatRes.status} when loading currencies`
+      let cryptoData: CoinbaseCurrency[] = [];
+      let fiatData: CoinbaseCurrency[] = [];
+
+      // Handle crypto response (may fail)
+      if (cryptoRes.ok) {
+        const cryptoJson =
+          (await cryptoRes.json()) as CoinbaseCurrenciesResponse;
+        cryptoData = cryptoJson.data ?? [];
+      } else {
+        console.warn(
+          "[info-store] Crypto currencies request failed",
+          cryptoRes.status
         );
       }
 
-      const cryptoJson = (await cryptoRes.json()) as CoinbaseCurrenciesResponse;
-      const fiatJson = (await fiatRes.json()) as CoinbaseCurrenciesResponse;
+      // Handle fiat response (may fail)
+      if (fiatRes.ok) {
+        const fiatJson = (await fiatRes.json()) as CoinbaseCurrenciesResponse;
+        fiatData = fiatJson.data ?? [];
+      } else {
+        console.warn(
+          "[info-store] Fiat currencies request failed",
+          fiatRes.status
+        );
+      }
 
-      const cryptoData: CoinbaseCurrency[] = cryptoJson.data ?? [];
-      const fiatData: CoinbaseCurrency[] = fiatJson.data ?? [];
+      // If BOTH failed, that's a real error
+      if (!cryptoRes.ok && !fiatRes.ok) {
+        throw new Error(
+          `Both crypto and fiat currency requests failed: ` +
+            `${cryptoRes.status}/${fiatRes.status}`
+        );
+      }
 
-      // Map helpers returning Asset | null, then filter out null entries.
+      // Map helpers returning Asset | null, then filter nulls
       const cryptoMapped: Array<Asset | null> = cryptoData.map(
         (item): Asset | null => {
-          // Prefer id, then code; fallback to empty string if both missing.
           const code = String(item.id ?? item.code ?? "").toUpperCase();
           const name = String(item.name ?? code);
           const minSize =
@@ -117,11 +136,9 @@ export const useInfoStore = create<InfoState>((set, get) => ({
         }
       );
 
-      // Type-safe filters: turn (Asset | null)[] into Asset[]
       const cryptoAssets = cryptoMapped.filter((a): a is Asset => a !== null);
       const fiatAssets = fiatMapped.filter((a): a is Asset => a !== null);
 
-      // Merge and sort assets by code for stable display.
       const assets: Asset[] = [...cryptoAssets, ...fiatAssets].sort((a, b) =>
         a.code.localeCompare(b.code)
       );

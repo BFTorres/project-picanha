@@ -16,7 +16,7 @@ export function PortfolioPage() {
   }, [fetchRates, lastUpdated]);
 
   return (
-    <div className="flex flex-1 flex-col gap-4 md:gap-6">
+    <div className="flex w-full min-w-0 flex-1 flex-col gap-4 md:gap-6">
       <div>
         <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
           {t("portfolio.title", "Portfolio")}
@@ -28,15 +28,17 @@ export function PortfolioPage() {
           )}
         </p>
       </div>
+
       <SectionCards />
 
       <div className="grid gap-4 lg:grid-cols-1">
-        <div className="lg:col-span-2 space-y-4">
+        <div className="min-w-0 space-y-4">
           <PerformanceChart />
         </div>
       </div>
-      <HistoryTable />
-
+      <div className="min-w-0">
+        <HistoryTable />
+      </div>
     </div>
   );
 }

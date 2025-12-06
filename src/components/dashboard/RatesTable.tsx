@@ -1,8 +1,8 @@
 // src/components/dashboard/RatesTable.tsx
-import { useEffect, useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -10,14 +10,14 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
@@ -25,34 +25,34 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
-import { useCoinbaseStore } from "@/stores/coinbase-store"
-import { useWatchlistStore } from "@/stores/watchlist-store"
+import { useCoinbaseStore } from "@/stores/coinbase-store";
+import { useWatchlistStore } from "@/stores/watchlist-store";
 
-const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const;
 
 export function RatesTable() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { baseCurrency, rates, isLoading, error, fetchRates, setBaseCurrency } =
-    useCoinbaseStore()
-  const { symbols: watchlist, addSymbol } = useWatchlistStore()
+    useCoinbaseStore();
+  const { symbols: watchlist, addSymbol } = useWatchlistStore();
 
-  const [query, setQuery] = useState("")
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState<number>(10) // default: 10 rows per page
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState<number>(10);
 
-  const [detailsOpen, setDetailsOpen] = useState(false)
-  const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null)
-  const [selectedRate, setSelectedRate] = useState<number | null>(null)
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
+  const [selectedRate, setSelectedRate] = useState<number | null>(null);
 
   // Keyboard shortcuts: ← and → for previous / next page
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      const target = e.target as HTMLElement | null
-      const tag = target?.tagName
-      const role = target?.getAttribute("role")
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      const role = target?.getAttribute("role");
 
       if (
         tag === "INPUT" ||
@@ -60,76 +60,75 @@ export function RatesTable() {
         tag === "SELECT" ||
         role === "combobox"
       ) {
-        return
+        return;
       }
 
       if (e.key === "ArrowLeft") {
-        setPage((prev) => (prev > 1 ? prev - 1 : prev))
+        setPage((prev) => (prev > 1 ? prev - 1 : prev));
       } else if (e.key === "ArrowRight") {
-        setPage((prev) => prev + 1)
+        setPage((prev) => prev + 1);
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const { rowsForPage, totalItems, pageCount, safePage } = useMemo(() => {
     const entries = Object.entries(rates)
       .filter(([symbol]) => symbol.length <= 5)
-      .sort(([a], [b]) => a.localeCompare(b))
+      .sort(([a], [b]) => a.localeCompare(b));
 
     const filtered =
       query.trim().length > 0
         ? entries.filter(([symbol]) =>
-            symbol.toLowerCase().includes(query.trim().toLowerCase()),
+            symbol.toLowerCase().includes(query.trim().toLowerCase())
           )
-        : entries
+        : entries;
 
-    const total = filtered.length
-    const pages = Math.max(1, Math.ceil(total / pageSize))
+    const total = filtered.length;
+    const pages = Math.max(1, Math.ceil(total / pageSize));
 
-    const current = Math.min(Math.max(page, 1), pages)
+    const current = Math.min(Math.max(page, 1), pages);
 
-    const start = (current - 1) * pageSize
-    const end = start + pageSize
-    const pageSlice = filtered.slice(start, end)
+    const start = (current - 1) * pageSize;
+    const end = start + pageSize;
+    const pageSlice = filtered.slice(start, end);
 
     return {
       rowsForPage: pageSlice,
       totalItems: total,
       pageCount: pages,
       safePage: current,
-    }
-  }, [rates, query, page, pageSize])
+    };
+  }, [rates, query, page, pageSize]);
 
   function handlePageChange(nextPage: number) {
-    const clamped = Math.min(Math.max(nextPage, 1), pageCount)
-    setPage(clamped)
+    const clamped = Math.min(Math.max(nextPage, 1), pageCount);
+    setPage(clamped);
   }
 
   function handlePageSizeChange(value: string) {
-    const next = parseInt(value, 10)
+    const next = parseInt(value, 10);
     if (!Number.isNaN(next)) {
-      setPageSize(next)
-      setPage(1)
+      setPageSize(next);
+      setPage(1);
     }
   }
 
   function handleQueryChange(value: string) {
-    setQuery(value)
-    setPage(1)
+    setQuery(value);
+    setPage(1);
   }
 
   function openDetails(symbol: string, rate: number) {
-    setSelectedSymbol(symbol)
-    setSelectedRate(rate)
-    setDetailsOpen(true)
+    setSelectedSymbol(symbol);
+    setSelectedRate(rate);
+    setDetailsOpen(true);
   }
 
   const isInWatchlist =
-    selectedSymbol != null &&
-    watchlist.includes(selectedSymbol.toUpperCase())
+    selectedSymbol != null && watchlist.includes(selectedSymbol.toUpperCase());
 
   return (
     <Card>
@@ -153,7 +152,7 @@ export function RatesTable() {
             onChange={(e) => handleQueryChange(e.target.value)}
             placeholder={t(
               "dashboard.table.searchPlaceholder",
-              "Filter by symbol, e.g. BTC",
+              "Filter by symbol, e.g. BTC"
             )}
             className="h-8 max-w-xs text-xs"
             aria-label={t("dashboard.table.searchLabel", "Filter currencies")}
@@ -174,7 +173,7 @@ export function RatesTable() {
                     <SelectItem key={size} value={String(size)}>
                       {size}
                     </SelectItem>
-                  ),
+                  )
                 )}
               </SelectContent>
             </Select>
@@ -203,19 +202,26 @@ export function RatesTable() {
             {query.trim()
               ? t(
                   "dashboard.table.noResults",
-                  "No currencies match your filter.",
+                  "No currencies match your filter."
                 )
               : t(
                   "dashboard.table.empty",
-                  "No rates available. Try fetching data from Coinbase.",
+                  "No rates available. Try fetching data from Coinbase."
                 )}
           </p>
         )}
 
         {!isLoading && !error && totalItems > 0 && (
           <>
-            <div className="overflow-x-auto">
-              <table className="min-w-full border-collapse text-sm">
+            <div
+              className="relative w-full overflow-x-auto"
+              role="region"
+              aria-label={t(
+                "dashboard.table.scrollRegion",
+                "Scrollable exchange rates table"
+              )}
+            >
+              <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b bg-muted/40">
                     <th className="py-2 pl-2 pr-4 text-left font-medium">
@@ -237,8 +243,8 @@ export function RatesTable() {
                       tabIndex={0}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault()
-                          openDetails(symbol, value)
+                          e.preventDefault();
+                          openDetails(symbol, value);
                         }
                       }}
                     >
@@ -274,11 +280,11 @@ export function RatesTable() {
                         href="#"
                         aria-label={t(
                           "dashboard.table.firstPage",
-                          "Go to first page",
+                          "Go to first page"
                         )}
                         onClick={(e) => {
-                          e.preventDefault()
-                          if (safePage > 1) handlePageChange(1)
+                          e.preventDefault();
+                          if (safePage > 1) handlePageChange(1);
                         }}
                         className={
                           safePage === 1
@@ -295,8 +301,8 @@ export function RatesTable() {
                       <PaginationPrevious
                         href="#"
                         onClick={(e) => {
-                          e.preventDefault()
-                          if (safePage > 1) handlePageChange(safePage - 1)
+                          e.preventDefault();
+                          if (safePage > 1) handlePageChange(safePage - 1);
                         }}
                         aria-disabled={safePage === 1}
                         className={
@@ -309,7 +315,7 @@ export function RatesTable() {
 
                     {/* Numeric page links */}
                     {Array.from({ length: pageCount }).map((_, index) => {
-                      const p = index + 1
+                      const p = index + 1;
 
                       if (
                         p === 1 ||
@@ -322,14 +328,14 @@ export function RatesTable() {
                               href="#"
                               isActive={p === safePage}
                               onClick={(e) => {
-                                e.preventDefault()
-                                handlePageChange(p)
+                                e.preventDefault();
+                                handlePageChange(p);
                               }}
                             >
                               {p}
                             </PaginationLink>
                           </PaginationItem>
-                        )
+                        );
                       }
 
                       if (p === 2 && safePage > 3) {
@@ -337,7 +343,7 @@ export function RatesTable() {
                           <PaginationItem key="start-ellipsis">
                             <span className="px-2">…</span>
                           </PaginationItem>
-                        )
+                        );
                       }
 
                       if (p === pageCount - 1 && safePage < pageCount - 2) {
@@ -345,10 +351,10 @@ export function RatesTable() {
                           <PaginationItem key="end-ellipsis">
                             <span className="px-2">…</span>
                           </PaginationItem>
-                        )
+                        );
                       }
 
-                      return null
+                      return null;
                     })}
 
                     {/* Next */}
@@ -356,9 +362,9 @@ export function RatesTable() {
                       <PaginationNext
                         href="#"
                         onClick={(e) => {
-                          e.preventDefault()
+                          e.preventDefault();
                           if (safePage < pageCount) {
-                            handlePageChange(safePage + 1)
+                            handlePageChange(safePage + 1);
                           }
                         }}
                         aria-disabled={safePage === pageCount}
@@ -376,12 +382,12 @@ export function RatesTable() {
                         href="#"
                         aria-label={t(
                           "dashboard.table.lastPage",
-                          "Go to last page",
+                          "Go to last page"
                         )}
                         onClick={(e) => {
-                          e.preventDefault()
+                          e.preventDefault();
                           if (safePage < pageCount) {
-                            handlePageChange(pageCount)
+                            handlePageChange(pageCount);
                           }
                         }}
                         className={
@@ -410,30 +416,30 @@ export function RatesTable() {
           isInWatchlist={Boolean(isInWatchlist)}
           onAddToWatchlist={() => {
             if (selectedSymbol) {
-              addSymbol(selectedSymbol)
+              addSymbol(selectedSymbol);
             }
           }}
           onSetBaseCurrency={async () => {
-            if (!selectedSymbol) return
-            setBaseCurrency(selectedSymbol)
-            await fetchRates(selectedSymbol)
+            if (!selectedSymbol) return;
+            setBaseCurrency(selectedSymbol);
+            await fetchRates(selectedSymbol);
           }}
         />
       </CardContent>
     </Card>
-  )
+  );
 }
 
 type SymbolDetailsSheetProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  baseCurrency: string
-  symbol: string | null
-  rate: number | null
-  isInWatchlist: boolean
-  onAddToWatchlist: () => void
-  onSetBaseCurrency: () => void | Promise<void>
-}
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  baseCurrency: string;
+  symbol: string | null;
+  rate: number | null;
+  isInWatchlist: boolean;
+  onAddToWatchlist: () => void;
+  onSetBaseCurrency: () => void | Promise<void>;
+};
 
 function SymbolDetailsSheet({
   open,
@@ -445,31 +451,31 @@ function SymbolDetailsSheet({
   onAddToWatchlist,
   onSetBaseCurrency,
 }: SymbolDetailsSheetProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  // If nothing is selected, keep sheet hidden even if 'open' is true by mistake
-  const effectiveOpen = open && symbol != null && rate != null
+  const effectiveOpen = open && symbol != null && rate != null;
 
-  const inverse =
-    rate != null && rate !== 0 ? 1 / rate : null
+  const inverse = rate != null && rate !== 0 ? 1 / rate : null;
 
   return (
     <Sheet open={effectiveOpen} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full max-w-md">
         <SheetHeader>
           <SheetTitle>
-            {symbol ? `${symbol} / ${baseCurrency}` : t("drawer.title", "Details")}
+            {symbol
+              ? `${symbol} / ${baseCurrency}`
+              : t("drawer.title", "Details")}
           </SheetTitle>
           <SheetDescription>
             {t(
               "drawer.description",
-              "Quick details and actions for the selected currency pair.",
+              "Quick details and actions for the selected currency pair."
             )}
           </SheetDescription>
         </SheetHeader>
 
         {symbol != null && rate != null && (
-          <div className="mt-4 space-y-4 text-sm">
+          <div className="mt-4 space-y-4 p-4 text-sm">
             <div>
               <p className="text-xs font-medium text-muted-foreground">
                 {t("drawer.currentRateLabel", "Current rate")}
@@ -491,7 +497,7 @@ function SymbolDetailsSheet({
               <p className="mt-1 text-xs text-muted-foreground">
                 {t(
                   "drawer.actionsHint",
-                  "You can add this symbol to your watchlist or use it as the base currency for all rates.",
+                  "You can add this symbol to your watchlist or use it as the base currency for all rates."
                 )}
               </p>
             </div>
@@ -518,14 +524,12 @@ function SymbolDetailsSheet({
             disabled={!symbol}
             onClick={onSetBaseCurrency}
           >
-            {t(
-              "drawer.setAsBase",
-              "Set {{symbol}} as base currency",
-              { symbol: symbol ?? "" },
-            )}
+            {t("drawer.setAsBase", "Set {{symbol}} as base currency", {
+              symbol: symbol ?? "",
+            })}
           </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  )
+  );
 }

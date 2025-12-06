@@ -1,12 +1,12 @@
-import { useState, type ReactNode } from "react"
-import { useTranslation } from "react-i18next"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { useAccessibilityStore } from "@/stores/accessibility-store"
-import { useUiStore } from "@/stores/ui-store"
-import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses"
-import type { ViewId } from "@/types/view"
-import type { LucideIcon } from "lucide-react"
+import { useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useAccessibilityStore } from "@/stores/accessibility-store";
+import { useUiStore } from "@/stores/ui-store";
+import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
+import type { ViewId } from "@/types/view";
+import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
   Coins,
@@ -14,45 +14,45 @@ import {
   Accessibility as AccessibilityIcon,
   ChevronRight,
   Wallet,
-} from "lucide-react"
+} from "lucide-react";
 
 type AppLayoutProps = {
-  children: ReactNode
-  activeRoute: ViewId
-  onNavigate: (route: ViewId) => void
-}
+  children: ReactNode;
+  activeRoute: ViewId;
+  onNavigate: (route: ViewId) => void;
+};
 
 export function AppLayout({
   children,
   activeRoute,
   onNavigate,
 }: AppLayoutProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { mobileSidebarOpen, toggleMobileSidebar, closeMobileSidebar } =
-    useUiStore()
+    useUiStore();
 
-  const { contrastClass, fontFamilyClass } = useAccessibilityClasses()
+  const { contrastClass, fontFamilyClass } = useAccessibilityClasses();
 
   const rootClasses = cn(
     "app-root flex min-h-screen bg-background text-foreground",
     contrastClass,
-    fontFamilyClass,
-  )
+    fontFamilyClass
+  );
 
   function handleNavigate(route: ViewId) {
-    onNavigate(route)
-    closeMobileSidebar()
+    onNavigate(route);
+    closeMobileSidebar();
   }
 
   return (
     <div className={rootClasses}>
       {/* Desktop sidebar */}
       <aside className="hidden w-56 flex-col border-r bg-muted/40 p-4 md:flex lg:w-64">
-        <SidebarContent activeRoute={activeRoute} onNavigate={onNavigate} />
+        <SidebarContent activeRoute={activeRoute} onNavigate={onNavigate}  />
       </aside>
 
       {/* Main content */}
-      <div className="flex min-h-screen flex-1 flex-col">
+      <div className="flex min-h-screen flex-1 min-w-0 flex-col">
         <header className="flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur md:h-16 md:px-6">
           {/* Mobile: burger + logo */}
           <div className="flex items-center gap-2 md:hidden">
@@ -87,7 +87,9 @@ export function AppLayout({
           </div>
         </header>
 
-        <main className="flex-1 space-y-4 p-4 md:p-6">{children}</main>
+        <main className="flex-1 min-w-0 w-full max-w-full space-y-4 p-4 md:p-6">
+          {children}
+        </main>
       </div>
 
       {/* Mobile sidebar overlay */}
@@ -108,34 +110,37 @@ export function AppLayout({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 type SidebarContentProps = {
-  activeRoute: ViewId
-  onNavigate: (route: ViewId) => void
-}
+  activeRoute: ViewId;
+  onNavigate: (route: ViewId) => void;
+};
 
 function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  type NavSectionId = "dashboard" | "portfolio" | "assets" | "legal" | "accessibility"
+  type NavSectionId =
+    | "dashboard"
+    | "portfolio"
+    | "assets"
+    | "legal"
+    | "accessibility";
 
   interface NavItemConfig {
-    id: ViewId
-    label: string
+    id: ViewId;
+    label: string;
   }
 
   interface NavSectionConfig {
-    id: NavSectionId
-    label: string
-    icon: LucideIcon
-    collapsible: boolean
-    items: NavItemConfig[]
+    id: NavSectionId;
+    label: string;
+    icon: LucideIcon;
+    collapsible: boolean;
+    items: NavItemConfig[];
   }
 
-  // Config-driven structure for the sidebar.
-  // This is where you add/remove sections or sub-pages later.
   const sections: NavSectionConfig[] = [
     {
       id: "dashboard",
@@ -144,15 +149,15 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       collapsible: true,
       items: [
         {
-          id: "dashboard-overview",
+          id: "dashboard-overview" as ViewId,
           label: t("nav.dashboardOverview", "Overview"),
         },
         {
-          id: "dashboard-analytics",
+          id: "dashboard-analytics" as ViewId,
           label: t("nav.dashboardAnalytics", "Analytics"),
         },
         {
-          id: "dashboard-watchlist",
+          id: "dashboard-watchlist" as ViewId,
           label: t("nav.dashboardWatchlist", "Watchlist"),
         },
       ],
@@ -164,7 +169,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       collapsible: false,
       items: [
         {
-          id: "portfolio",
+          id: "portfolio" as ViewId,
           label: t("nav.portfolio", "Portfolio"),
         },
       ],
@@ -176,15 +181,15 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       collapsible: true,
       items: [
         {
-          id: "assets-overview",
+          id: "assets-overview" as ViewId,
           label: t("nav.assetsOverview", "Overview"),
         },
         {
-          id: "assets-crypto",
+          id: "assets-crypto" as ViewId,
           label: t("nav.assetsCrypto", "Crypto"),
         },
         {
-          id: "assets-fiat",
+          id: "assets-fiat" as ViewId,
           label: t("nav.assetsFiat", "Fiat"),
         },
       ],
@@ -196,15 +201,15 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       collapsible: true,
       items: [
         {
-          id: "legal-imprint",
+          id: "legal-imprint" as ViewId,
           label: t("nav.legalImprint", "Imprint"),
         },
         {
-          id: "legal-privacy",
+          id: "legal-privacy" as ViewId,
           label: t("nav.legalPrivacy", "Privacy"),
         },
         {
-          id: "legal-terms",
+          id: "legal-terms" as ViewId,
           label: t("nav.legalTerms", "Terms & conditions"),
         },
       ],
@@ -216,12 +221,12 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       collapsible: false,
       items: [
         {
-          id: "accessibility",
+          id: "accessibility" as ViewId,
           label: t("nav.accessibility", "Accessibility"),
         },
       ],
     },
-  ]
+  ];
 
   const [openSections, setOpenSections] = useState<Record<NavSectionId, boolean>>({
     dashboard: true,
@@ -229,25 +234,24 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
     assets: false,
     legal: false,
     accessibility: true,
-  })
+  });
 
   function toggleSection(id: NavSectionId) {
     setOpenSections((prev) => ({
       ...prev,
       [id]: !prev[id],
-    }))
+    }));
   }
 
   return (
     <>
       <nav className="mb-6 space-y-1">
         {sections.map((section) => {
-          const Icon = section.icon
+          const Icon = section.icon;
 
           if (!section.collapsible) {
-            // Accessibility – single, non-collapsible item with icon.
-            const item = section.items[0]
-            const isActive = activeRoute === item.id
+            const item = section.items[0];
+            const isActive = activeRoute === item.id;
 
             return (
               <div key={section.id} className="space-y-0.5">
@@ -258,13 +262,13 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
                   icon={<Icon className="h-4 w-4" aria-hidden="true" />}
                 />
               </div>
-            )
+            );
           }
 
           const isAnyChildActive = section.items.some(
-            (item) => item.id === activeRoute,
-          )
-          const isOpen = openSections[section.id]
+            (item) => item.id === activeRoute
+          );
+          const isOpen = openSections[section.id];
 
           return (
             <div key={section.id} className="space-y-0.5">
@@ -274,7 +278,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
                 onClick={() => toggleSection(section.id)}
                 className={cn(
                   "flex w-full items-center rounded-md px-2 py-1.5 text-sm transition hover:bg-accent hover:text-accent-foreground",
-                  isAnyChildActive && "bg-accent text-accent-foreground",
+                  isAnyChildActive && "bg-accent text-accent-foreground"
                 )}
                 aria-expanded={isOpen}
               >
@@ -283,7 +287,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
                 <ChevronRight
                   className={cn(
                     "h-3 w-3 transition-transform",
-                    isOpen && "rotate-90",
+                    isOpen && "rotate-90"
                   )}
                   aria-hidden="true"
                 />
@@ -293,7 +297,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
               {isOpen && (
                 <div className="mt-0.5 space-y-0.5">
                   {section.items.map((item) => {
-                    const isActive = activeRoute === item.id
+                    const isActive = activeRoute === item.id;
                     return (
                       <SidebarItem
                         key={item.id}
@@ -302,12 +306,12 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
                         onClick={() => onNavigate(item.id)}
                         className="pl-7 text-sm"
                       />
-                    )
+                    );
                   })}
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </nav>
 
@@ -316,21 +320,21 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
         <p>
           {t(
             "nav.infoBody",
-            "No real customer data. Public Coinbase API only.",
+            "No real customer data. Public Coinbase API only."
           )}
         </p>
       </div>
     </>
-  )
+  );
 }
 
 type SidebarItemProps = {
-  label: string
-  active?: boolean
-  onClick?: () => void
-  className?: string
-  icon?: ReactNode
-}
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+  className?: string;
+  icon?: ReactNode;
+};
 
 function SidebarItem({
   label,
@@ -346,7 +350,7 @@ function SidebarItem({
       className={cn(
         "flex w-full items-center rounded-md px-2 py-1.5 text-sm transition hover:bg-accent hover:text-accent-foreground",
         active && "bg-accent text-accent-foreground",
-        className,
+        className
       )}
     >
       {icon && (
@@ -356,16 +360,16 @@ function SidebarItem({
       )}
       <span className="truncate">{label}</span>
     </button>
-  )
+  );
 }
 
 function HeaderLanguageToggle() {
-  const { i18n } = useTranslation()
-  const isDe = i18n.language.startsWith("de")
-  const currentLang = isDe ? "de" : "en"
+  const { i18n } = useTranslation();
+  const isDe = i18n.language.startsWith("de");
+  const currentLang = isDe ? "de" : "en";
 
   function toggleLanguage() {
-    void i18n.changeLanguage(currentLang === "de" ? "en" : "de")
+    void i18n.changeLanguage(currentLang === "de" ? "en" : "de");
   }
 
   return (
@@ -380,39 +384,39 @@ function HeaderLanguageToggle() {
     >
       {currentLang === "de" ? "DE" : "EN"}
     </Button>
-  )
+  );
 }
 
 function ThemeToggleButtonVariant3() {
-  const { t } = useTranslation()
-  const { theme, setTheme } = useAccessibilityStore()
+  const { t } = useTranslation();
+  const { theme, setTheme } = useAccessibilityStore();
 
   function handleClick() {
     const next =
       theme === "light"
         ? "dark"
         : theme === "dark"
-          ? "contrast"
-          : theme === "contrast"
-            ? "contrastLight"
-            : "light" // contrastLight -> light
-    setTheme(next)
+        ? "contrast"
+        : theme === "contrast"
+        ? "contrastLight"
+        : "light";
+    setTheme(next);
   }
 
   const srLabel =
     theme === "light"
       ? t("a11y.toggleThemeToDark", "Switch to dark mode")
       : theme === "dark"
-        ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
-        : theme === "contrast"
-          ? t(
-            "a11y.toggleThemeToContrastLight",
-            "Switch to high contrast light mode",
-          )
-          : t("a11y.toggleThemeToLight", "Switch to light mode")
+      ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
+      : theme === "contrast"
+      ? t(
+          "a11y.toggleThemeToContrastLight",
+          "Switch to high contrast light mode"
+        )
+      : t("a11y.toggleThemeToLight", "Switch to light mode");
 
   const Icon =
-    theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon
+    theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon;
 
   return (
     <Button
@@ -432,7 +436,7 @@ function ThemeToggleButtonVariant3() {
       )}
       <span className="sr-only">{srLabel}</span>
     </Button>
-  )
+  );
 }
 
 // Simple inline icons
@@ -456,7 +460,7 @@ function SunIcon(props: React.SVGProps<SVGSVGElement>) {
       <path d="M5 19l1.5-1.5" />
       <path d="M17.5 6.5L19 5" />
     </svg>
-  )
+  );
 }
 
 function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -470,7 +474,7 @@ function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
     >
       <path d="M21 12.79A9 9 0 0 1 12 3a7 7 0 0 0 0 14 9 9 0 0 0 9-4.21Z" />
     </svg>
-  )
+  );
 }
 
 function ContrastIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -485,5 +489,5 @@ function ContrastIcon(props: React.SVGProps<SVGSVGElement>) {
       <circle cx="12" cy="12" r="9" />
       <path d="M12 3v18" />
     </svg>
-  )
+  );
 }
