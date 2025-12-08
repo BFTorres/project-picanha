@@ -17,3 +17,4 @@ export type ViewId =
   | "legal-privacy"
   | "legal-terms"
   | "accessibility"
+  | "adamsandbox"

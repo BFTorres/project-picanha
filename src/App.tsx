@@ -12,6 +12,7 @@ import { AssetsCryptoPage } from "./pages/AssetsCryptoPage";
 import { AssetsFiatPage } from "./pages/AssetsFiatPage";
 import { LegalPrivacyPage } from "./pages/LegalPrivacyPage";
 import { LegalTermsPage } from "./pages/LegalTermsPage";
+import { AdamSandboxPage } from "./pages/AdamSandboxPage";
 
 // Root React component of the application.
 // This is basically our “router” for the different views (dashboard, info, etc.),
@@ -65,6 +66,10 @@ export function App() {
     case "accessibility":
     default:
       content = <AccessibilityPage />;
+      break;
+    // Adam Sandbox
+    case "adamsandbox":
+      content = <AdamSandboxPage />;
       break;
   }
 

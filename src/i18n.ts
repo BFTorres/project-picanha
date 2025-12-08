@@ -315,6 +315,10 @@ const resources = {
           "Switch to high contrast light mode",
         toggleThemeToLight: "Switch to light mode",
       },
+      adamsandbox: {
+        heading: "Adam Sandbox",
+        body: "Testen und lernen.",
+      },
       imprint: {
         heading: "Imprint (Demo)",
         body: "This is a purely fictitious learning application with no relation to real products or customer data.",

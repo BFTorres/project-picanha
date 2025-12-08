@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Coins,
   Scale,
+  Bird,
   Accessibility as AccessibilityIcon,
   ChevronRight,
 } from "lucide-react"
@@ -118,7 +119,7 @@ type SidebarContentProps = {
 function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
   const { t } = useTranslation()
 
-  type NavSectionId = "dashboard" | "assets" | "legal" | "accessibility"
+  type NavSectionId = "dashboard" | "assets" | "legal" | "accessibility" | "adamsandbox"
 
   interface NavItemConfig {
     id: ViewId
@@ -208,6 +209,18 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
         },
       ],
     },
+    {
+      id: "adamsandbox",
+      label: t("nav.adamsandbox", "Adam Sandbox"),
+      icon: Bird,
+      collapsible: false,
+      items: [
+        {
+          id: "adamsandbox",
+          label: t("nav.adamsandbox", "Adam Sandbox"),
+        },
+      ],
+    },
   ]
 
   const [openSections, setOpenSections] = useState<Record<NavSectionId, boolean>>({
@@ -215,6 +228,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
     assets: false,
     legal: false,
     accessibility: true,
+    adamsandbox: true
   })
 
   function toggleSection(id: NavSectionId) {
