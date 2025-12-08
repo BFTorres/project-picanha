@@ -22,6 +22,10 @@ const resources = {
         dashboardAnalytics: "Analytics",
         dashboardWatchlist: "Watchlist",
 
+        // Portfolio sub-pages
+        portfolioWallet: "Wallet",
+        portfolioHistory: "History",
+
         // Assets sub-pages
         assetsOverview: "Übersicht",
         assetsCrypto: "Krypto",
@@ -65,9 +69,13 @@ const resources = {
           changeLabel: "Veränderung über den Zeitraum",
         },
       },
-      portfolio: {
-        heading: "Portfolio",
-        description: "Übersicht über deine Vermögenswerte und letzten Aktivitäten.",
+      portfolioWallet: {
+        heading: "Wallet",
+        description: "Übersicht über deine Vermögenswerte.",
+      },
+      portfolioHistory: {
+        heading: "History",
+        description: "Übersicht über deine Transaktionen.",
       },
       settings: {
         heading: "Einstellungen & Barrierefreiheit",
@@ -240,8 +248,14 @@ const resources = {
         },
       },
       portfolio: {
-        heading: "Portfolio",
-        description: "Overview of your assets and recent activity.",
+        wallet: {
+          heading: "Portfolio",
+          description: "Overview of your assets.",
+        },
+        history: {
+          heading: "Portfolio",
+          description: "Overview of your transactions.",
+        },
       },
       settings: {
         heading: "Settings & Accessibility",

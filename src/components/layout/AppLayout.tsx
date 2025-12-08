@@ -48,7 +48,7 @@ export function AppLayout({
     <div className={rootClasses}>
       {/* Desktop sidebar */}
       <aside className="hidden w-56 flex-col border-r bg-muted/40 p-4 md:flex lg:w-64">
-        <SidebarContent activeRoute={activeRoute} onNavigate={onNavigate}  />
+        <SidebarContent activeRoute={activeRoute} onNavigate={onNavigate} />
       </aside>
 
       {/* Main content */}
@@ -166,11 +166,15 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       id: "portfolio",
       label: t("nav.portfolio", "Portfolio"),
       icon: Wallet,
-      collapsible: false,
+      collapsible: true,
       items: [
         {
-          id: "portfolio" as ViewId,
-          label: t("nav.portfolio", "Portfolio"),
+          id: "portfolio-wallet" as ViewId,
+          label: t("nav.portfolioWallet", "Wallet"),
+        },
+        {
+          id: "portfolio-history" as ViewId,
+          label: t("nav.portfolioHistory", "History"),
         },
       ],
     },
@@ -396,10 +400,10 @@ function ThemeToggleButtonVariant3() {
       theme === "light"
         ? "dark"
         : theme === "dark"
-        ? "contrast"
-        : theme === "contrast"
-        ? "contrastLight"
-        : "light";
+          ? "contrast"
+          : theme === "contrast"
+            ? "contrastLight"
+            : "light";
     setTheme(next);
   }
 
@@ -407,13 +411,13 @@ function ThemeToggleButtonVariant3() {
     theme === "light"
       ? t("a11y.toggleThemeToDark", "Switch to dark mode")
       : theme === "dark"
-      ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
-      : theme === "contrast"
-      ? t(
-          "a11y.toggleThemeToContrastLight",
-          "Switch to high contrast light mode"
-        )
-      : t("a11y.toggleThemeToLight", "Switch to light mode");
+        ? t("a11y.toggleThemeToContrastDark", "Switch to high contrast dark mode")
+        : theme === "contrast"
+          ? t(
+            "a11y.toggleThemeToContrastLight",
+            "Switch to high contrast light mode"
+          )
+          : t("a11y.toggleThemeToLight", "Switch to light mode");
 
   const Icon =
     theme === "light" ? SunIcon : theme === "dark" ? MoonIcon : ContrastIcon;

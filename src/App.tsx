@@ -6,7 +6,8 @@ import type { ViewId } from "@/types/view";
 import { useAccessibilityEffects } from "@/hooks/useAccessibilityEffects";
 import { AccessibilityPage } from "./pages/AccessibilityPage";
 import { InformationPage } from "./pages/InformationPage";
-import { PortfolioPage } from "./pages/PortfolioPage";
+import { PortfolioWalletPage } from "./pages/PortfolioWalletPage";
+import { PortfolioHistoryPage } from "./pages/PortfolioHistoryPage";
 import { DashboardAnalyticsPage } from "./pages/DashboardAnalyticsPage";
 import { DashboardWatchlistPage } from "./pages/DashboardWatchlistPage";
 import { AssetsCryptoPage } from "./pages/AssetsCryptoPage";
@@ -41,8 +42,11 @@ export function App() {
       break;
 
     // Portfolio group
-    case "portfolio":
-      content = <PortfolioPage />;
+    case "portfolio-wallet":
+      content = <PortfolioWalletPage />;
+      break;
+    case "portfolio-history":
+      content = <PortfolioHistoryPage />;
       break;
 
     // Assets group
