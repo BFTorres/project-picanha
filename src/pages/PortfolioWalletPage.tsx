@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useCoinbaseStore } from "@/stores/coinbase-store";
 import { SectionCards } from "@/components/portfolio/SectionCards";
 import { PerformanceChart } from "@/components/portfolio/PerformanceChart";
-import { HistoryTable } from "@/components/portfolio/HistoryTable";
+import { WalletTable } from "@/components/portfolio/WalletTable";
 
-export function PortfolioPage() {
+export function PortfolioWalletPage() {
   const { t } = useTranslation();
   const { fetchRates, lastUpdated } = useCoinbaseStore();
 
@@ -24,7 +24,7 @@ export function PortfolioPage() {
         <p className="mt-1 text-sm text-muted-foreground">
           {t(
             "portfolio.subtitle",
-            "Übersicht über deine Vermögenswerte und letzten Aktivitäten."
+            "Übersicht über deine Vermögenswerte."
           )}
         </p>
       </div>
@@ -37,7 +37,7 @@ export function PortfolioPage() {
         </div>
       </div>
       <div className="min-w-0">
-        <HistoryTable />
+        <WalletTable />
       </div>
     </div>
   );
