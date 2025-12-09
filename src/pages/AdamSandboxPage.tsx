@@ -10,6 +10,24 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export const AdamSandboxPage: React.FC = () => {
   const { t } = useTranslation();
@@ -17,8 +35,37 @@ export const AdamSandboxPage: React.FC = () => {
   return (
     <section
       aria-labelledby="adamsandbox-heading"
-      className="max-w-2xl space-y-3 text-sm"
+      className="max-w-xl space-y-3"
     >
+      <Alert>
+  <AlertCircleIcon />
+  <AlertTitle>Heads up!</AlertTitle>
+  <AlertDescription>
+    You can add components and dependencies to your app using the cli.
+  </AlertDescription>
+</Alert>
+      <NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Item Two</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+        <NavigationMenuLink>Link</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
       <Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
@@ -54,6 +101,14 @@ export const AdamSandboxPage: React.FC = () => {
       </p>
       <a href="https://github.com/BFTorres/project-picanha" className="text-primary underline-offset-4">GitHub repo</a>
       <PriceChart />
+      <Accordion type="single" collapsible>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is it accessible?</AccordionTrigger>
+    <AccordionContent>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
     </section>
   )
 }
