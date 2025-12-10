@@ -11,7 +11,7 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { HistoryData } from "../data/HistoryData";
+import { HistoryData } from "@/data/HistoryData";
 import {
   Pagination,
   PaginationContent,
