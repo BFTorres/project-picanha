@@ -9,15 +9,15 @@ export interface ChartPoint {
   value: number
 }
 
-export type crypto = "BTC" | "SOL"
+export type crypto = "BTC" | "SOL" | "ETH" | "XRP" | "ADA" | "DOGE" //TODO: Liste muss mit der API abgestimmt werden
 
-export type fiat = "EUR" | "USD"
+export type fiat = "EUR" | "USD" | "GBP" | "CHF" | "JPY" | "CNY" //TODO: Liste muss mit der API abgestimmt werden
 
 export type AssetType = fiat | crypto
 
 
 function isFiat(asset: string): asset is fiat {
-  return asset === "EUR" || asset === "USD"
+  return asset === "EUR" || asset === "USD" || asset === "GBP" || asset === "CHF" || asset === "JPY" || asset === "CNY" //TODO: Liste muss mit der API abgestimmt werden
 }
 
 interface GroupedTransactionData {
