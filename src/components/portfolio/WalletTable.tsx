@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { HistoryData } from "../data/HistoryData"
+import { HistoryData } from "@/data/HistoryData"
 import {
   Pagination,
   PaginationContent,
@@ -75,8 +75,6 @@ export function WalletTable() {
       }))
     }
     const filtered = groupAndSumByAsset(HistoryData)
-    console.log(filtered)
-
     const total = filtered.length
     const pages = Math.max(1, Math.ceil(total / pageSize))
     const current = Math.min(Math.max(page, 1), pages)
