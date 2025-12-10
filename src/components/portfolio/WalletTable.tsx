@@ -29,7 +29,7 @@ type Transaction = {
   id: string
   date: string
   type: "buy" | "sell"
-  asset: "BTC" | "SOL" | "EUR" | "USD"
+  asset: string
   amount: number
   price: number
   total: number

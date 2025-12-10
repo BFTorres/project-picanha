@@ -25,11 +25,7 @@ const TIME_RANGES = ["1W", "1M", "1Y", "Max"] as const
 
 type TimeRange = (typeof TIME_RANGES)[number]
 
-const CATEGORIES = [
-  "Picanha Money Balance",
-  "Crypto Wallet",
-  "Total Value",
-] as const
+const CATEGORIES = ["Picanha Money Balance", "Crypto Wallet", "Total Value"] as const
 
 interface TooltipProps {
   active?: boolean
@@ -45,9 +41,7 @@ interface TooltipProps {
 
 export function PerformanceChart() {
   const { t } = useTranslation()
-
   const [selectedRange, setSelectedRange] = useState<TimeRange>("1Y")
-
   const type = usePrices((s) => s.type)
   const setType = usePrices((s) => s.setType)
   const getSeries = usePrices((s) => s.getSeries)
