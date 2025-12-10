@@ -4,13 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useCoinbaseStore } from "@/stores/coinbase-store"
 import { HistoryData } from "@/data/HistoryData"
 
-// TODO: Liste FIAT muss mit der API abgestimmt werden
+// TODO: Liste FIAT oder isFiat() muss mit der API abgestimmt werden
 const FIAT_CURRENCIES = ["EUR", "USD", "GBP", "CHF", "JPY", "CNY"] as const
 
 export function SectionCards() {
   const { t } = useTranslation()
   const { baseCurrency } = useCoinbaseStore()
-
   const histData = HistoryData
 
   let picanhaBalance = 0
@@ -19,7 +18,6 @@ export function SectionCards() {
   for (const tx of histData) {
     const { asset, type, total } = tx
     const isBuy = type === "buy"
-
     const isFiat = FIAT_CURRENCIES.includes(asset as any)
 
     // Picanha Money balance (nur FIAT Währungen)

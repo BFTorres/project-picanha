@@ -2,7 +2,7 @@ export interface Transaktion {
   id: string
   date: string
   type: "buy" | "sell"
-  asset: "BTC" | "SOL" | "EUR"
+  asset: string
   amount: number
   price: number
   total: number
@@ -69,7 +69,8 @@ export const HistoryData = [
     "price": 1,
     "total": 15000,
     "status": "completed"
-  }, {
+  },
+  {
     "id": "tx-7",
     "date": "2025-12-10T06:03:22.852Z",
     "type": "sell",
@@ -78,7 +79,8 @@ export const HistoryData = [
     "price": 1,
     "total": 1000,
     "status": "completed"
-  }, {
+  },
+  {
     "id": "tx-8",
     "date": "2025-12-10T07:03:22.852Z",
     "type": "buy",
@@ -86,6 +88,16 @@ export const HistoryData = [
     "amount": 54.81955795934622,
     "price": 140.87660422940456,
     "total": 2300,
+    "status": "completed"
+  },
+  {
+    "id": "tx-9",
+    "date": "2025-12-10T07:03:22.852Z",
+    "type": "buy",
+    "asset": "DOGE",
+    "amount": 666,
+    "price": 1,
+    "total": 666,
     "status": "completed"
   }
 ] satisfies readonly Transaktion[];

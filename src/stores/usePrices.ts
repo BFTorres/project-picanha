@@ -8,16 +8,13 @@ export interface ChartPoint {
   date: string
   value: number
 }
+// TODO: Liste FIAT oder isFiat() muss mit der API abgestimmt werden
+const FIAT_CURRENCIES = ["EUR", "USD", "GBP", "CHF", "JPY", "CNY"] as const
 
-export type crypto = "BTC" | "SOL" | "ETH" | "XRP" | "ADA" | "DOGE" //TODO: Liste muss mit der API abgestimmt werden
+export type fiat = (typeof FIAT_CURRENCIES)[number]
 
-export type fiat = "EUR" | "USD" | "GBP" | "CHF" | "JPY" | "CNY" //TODO: Liste muss mit der API abgestimmt werden
-
-export type AssetType = fiat | crypto
-
-
-function isFiat(asset: string): asset is fiat {
-  return asset === "EUR" || asset === "USD" || asset === "GBP" || asset === "CHF" || asset === "JPY" || asset === "CNY" //TODO: Liste muss mit der API abgestimmt werden
+export function isFiat(asset: string): asset is fiat {
+  return FIAT_CURRENCIES.includes(asset as fiat)
 }
 
 interface GroupedTransactionData {
