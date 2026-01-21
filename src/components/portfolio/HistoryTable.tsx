@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
@@ -7,11 +7,10 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 dayjs.extend(isBetween);
 dayjs.extend(localizedFormat);
 
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { HistoryData } from "@/data/HistoryData";
 import {
   Pagination,
   PaginationContent,
@@ -40,17 +39,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-
-type Transaction = {
-  id: string;
-  date: string;
-  type: "buy" | "sell";
-  asset: string;
-  amount: number;
-  price: number;
-  total: number;
-  status: "completed" | "pending";
-};
+import { fetchTransactions } from "@/data/services/transactionService";
+import type { Transaktion } from "@/data/interfaces/Transaktion";
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
 
@@ -122,10 +112,32 @@ export function HistoryTable() {
   const [from, setFrom] = useState<Date>();
   const [to, setTo] = useState<Date>();
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
+  const [selectedTx, setSelectedTx] = useState<Transaktion | null>(null);
+
+  const [transactions, setTransactions] = useState<Transaktion[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadTransactions = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchTransactions();
+        setTransactions(data);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to fetch transactions:", err);
+        setError("Failed to load transactions.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTransactions();
+  }, []);
 
   const { rowsForPage, totalItems, pageCount, safePage } = useMemo(() => {
-    let filtered = HistoryData;
+    let filtered = transactions;
 
     if (from || to) {
       filtered = filtered.filter((tx) => {
@@ -148,7 +160,7 @@ export function HistoryTable() {
       pageCount: pages,
       safePage: current,
     };
-  }, [from, to, page, pageSize]);
+  }, [from, to, page, pageSize, transactions]);
 
   return (
     <Card>
@@ -186,7 +198,25 @@ export function HistoryTable() {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {totalItems === 0 ? (
+        {loading ? (
+          <div className="flex h-40 flex-col items-center justify-center text-muted-foreground">
+            <Loader2 className="h-8 w-8 animate-spin mb-2" />
+            <p>{t("common.loading", "Loading...")}</p>
+          </div>
+        ) : error ? (
+          <div className="flex h-40 flex-col items-center justify-center text-red-500">
+            <AlertCircle className="h-8 w-8 mb-2" />
+            <p>{error}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => window.location.reload()}
+            >
+              Retry
+            </Button>
+          </div>
+        ) : totalItems === 0 ? (
           <p className="py-8 text-center text-sm text-muted-foreground">
             {t(
               "dashboard.table.noResults",
@@ -361,7 +391,7 @@ export function HistoryTable() {
 type TransactionDetailsSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  transaction: Transaction | null;
+  transaction: Transaktion | null;
 };
 
 function TransactionDetailsSheet({
