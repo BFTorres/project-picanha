@@ -11,8 +11,8 @@ export const VIEWS = [
 
   // Assets
   "assets-overview",
-  "assets-crypto",
-  "assets-fiat",
+/*   "assets-crypto",
+  "assets-fiat", */
 
   // Legal
   "legal-imprint",

@@ -188,14 +188,14 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
           id: "assets-overview" as ViewId,
           label: t("nav.assetsOverview", "Overview"),
         },
-        {
+/*         {
           id: "assets-crypto" as ViewId,
           label: t("nav.assetsCrypto", "Crypto"),
         },
         {
           id: "assets-fiat" as ViewId,
           label: t("nav.assetsFiat", "Fiat"),
-        },
+        }, */
       ],
     },
     {
