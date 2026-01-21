@@ -92,7 +92,7 @@ export const HistoryData = [
   },
   {
     "id": "tx-9",
-    "date": "2025-12-10T07:03:22.852Z",
+    "date": "2025-12-11T07:03:22.852Z",
     "type": "buy",
     "asset": "DOGE",
     "amount": 666,
