@@ -10,8 +10,8 @@ import { PortfolioWalletPage } from "./pages/portfolio/PortfolioWalletPage";
 import { PortfolioHistoryPage } from "./pages/portfolio/PortfolioHistoryPage";
 import { DashboardAnalyticsPage } from "./pages/dashboard/DashboardAnalyticsPage";
 import { DashboardWatchlistPage } from "./pages/dashboard/DashboardWatchlistPage";
-import { AssetsCryptoPage } from "./pages/assets/AssetsCryptoPage";
-import { AssetsFiatPage } from "./pages/assets/AssetsFiatPage";
+/* import { AssetsCryptoPage } from "./pages/assets/AssetsCryptoPage";
+import { AssetsFiatPage } from "./pages/assets/AssetsFiatPage"; */
 import { LegalPrivacyPage } from "./pages/legal/LegalPrivacyPage";
 import { LegalTermsPage } from "./pages/legal/LegalTermsPage";
 
@@ -53,12 +53,12 @@ export function App() {
     case "assets-overview":
       content = <InformationPage />;
       break;
-    case "assets-crypto":
+/*     case "assets-crypto":
       content = <AssetsCryptoPage />;
       break;
     case "assets-fiat":
       content = <AssetsFiatPage />;
-      break;
+      break; */
 
     // Legal group
     case "legal-imprint":
