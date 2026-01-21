@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { DashboardPage } from "./pages/DashboardPage";
-import { ImprintPage } from "./pages/ImprintPage";
+import { DashboardPage } from "./pages/dashboard/DashboardPage";
+import { ImprintPage } from "./pages/legal/ImprintPage";
 import { AppLayout } from "./components/layout/AppLayout";
 import type { ViewId } from "@/types/view";
 import { useAccessibilityEffects } from "@/hooks/useAccessibilityEffects";
-import { AccessibilityPage } from "./pages/AccessibilityPage";
-import { InformationPage } from "./pages/InformationPage";
-import { PortfolioWalletPage } from "./pages/PortfolioWalletPage";
-import { PortfolioHistoryPage } from "./pages/PortfolioHistoryPage";
-import { DashboardAnalyticsPage } from "./pages/DashboardAnalyticsPage";
-import { DashboardWatchlistPage } from "./pages/DashboardWatchlistPage";
-import { AssetsCryptoPage } from "./pages/AssetsCryptoPage";
-import { AssetsFiatPage } from "./pages/AssetsFiatPage";
-import { LegalPrivacyPage } from "./pages/LegalPrivacyPage";
-import { LegalTermsPage } from "./pages/LegalTermsPage";
+import { AccessibilityPage } from "./pages/accessiblity/AccessibilityPage";
+import { InformationPage } from "./pages/dashboard/InformationPage";
+import { PortfolioWalletPage } from "./pages/portfolio/PortfolioWalletPage";
+import { PortfolioHistoryPage } from "./pages/portfolio/PortfolioHistoryPage";
+import { DashboardAnalyticsPage } from "./pages/dashboard/DashboardAnalyticsPage";
+import { DashboardWatchlistPage } from "./pages/dashboard/DashboardWatchlistPage";
+import { AssetsCryptoPage } from "./pages/assets/AssetsCryptoPage";
+import { AssetsFiatPage } from "./pages/assets/AssetsFiatPage";
+import { LegalPrivacyPage } from "./pages/legal/LegalPrivacyPage";
+import { LegalTermsPage } from "./pages/legal/LegalTermsPage";
 
 // Root React component of the application.
 // This is basically our “router” for the different views (dashboard, info, etc.),
