@@ -107,19 +107,28 @@
    We apply them to <body> via a class on <html>.
    Tailwind's preflight sets body line-height, so we need to override that. */
 
-/* Default / normal spacing */
-.app-line-normal body {
-  line-height: 1.5;
+.app-line-normal body,
+.app-line-normal p,
+.app-line-normal li,
+.app-line-normal td,
+.app-line-normal th {
+  line-height: 1.5 !important;
 }
 
-/* Slightly more relaxed text spacing */
-.app-line-relaxed body {
-  line-height: 1.75;
+.app-line-relaxed body,
+.app-line-relaxed p,
+.app-line-relaxed li,
+.app-line-relaxed td,
+.app-line-relaxed th {
+  line-height: 1.75 !important;
 }
 
-/* Maximum spacing for users who need more separation between lines */
-.app-line-loose body {
-  line-height: 2;
+.app-line-loose body,
+.app-line-loose p,
+.app-line-loose li,
+.app-line-loose td,
+.app-line-loose th {
+  line-height: 2 !important;
 }
 
 /* === Phase 1 accessibility extras ======================================= */
