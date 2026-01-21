@@ -7,6 +7,7 @@ import { useUiStore } from "@/stores/ui-store";
 import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
 import type { ViewId } from "@/types/view";
 import type { LucideIcon } from "lucide-react";
+import { Languages } from 'lucide-react';
 import {
   LayoutDashboard,
   Coins,
@@ -386,8 +387,8 @@ function HeaderLanguageToggle() {
         currentLang === "de" ? "Switch to English" : "Auf Deutsch umschalten"
       }
     >
-      {currentLang === "de" ? "DE" : "EN"}
-    </Button>
+      <Languages />
+    </Button>/* {currentLang === "de" ? "DE" : "EN"} */
   );
 }
 
