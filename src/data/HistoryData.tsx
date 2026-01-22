@@ -99,5 +99,25 @@ export const HistoryData = [
     "price": 1,
     "total": 666,
     "status": "completed"
+  },
+  {
+    "id": "tx-10",
+    "date": "2026-01-01T07:03:22.852Z",
+    "type": "buy",
+    "asset": "EUR",
+    "amount": 15000,
+    "price": 1,
+    "total": 15000,
+    "status": "completed"
+  },
+  {
+    "id": "tx-11",
+    "date": "2026-01-19T07:03:22.852Z",
+    "type": "buy",
+    "asset": "DOGE",
+    "amount": 662,
+    "price": 1,
+    "total": 662,
+    "status": "completed"
   }
 ] satisfies readonly Transaktion[];
