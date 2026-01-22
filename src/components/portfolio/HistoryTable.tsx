@@ -50,6 +50,7 @@ type DateFilterProps = {
   label: string;
 };
 
+// Komponente zur Auswahl eines Zeitraums für die Filterung
 function DateFilter({ value, onChange, label }: DateFilterProps) {
   const [open, setOpen] = useState(false);
   const [tempDate, setTempDate] = useState<Date | undefined>();
@@ -107,6 +108,7 @@ function DateFilter({ value, onChange, label }: DateFilterProps) {
 
 export function HistoryTable() {
   const { t } = useTranslation();
+  // Paginierung und Filtern
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [from, setFrom] = useState<Date>();
@@ -114,10 +116,14 @@ export function HistoryTable() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [selectedTx, setSelectedTx] = useState<Transaktion | null>(null);
 
+  // Transaktionsdaten
   const [transactions, setTransactions] = useState<Transaktion[]>([]);
+  // Ladestatus
   const [loading, setLoading] = useState(true);
+  // Fehlermeldung
   const [error, setError] = useState<string | null>(null);
 
+  // Lädt die Transaktionen vom Backend beim Starten
   useEffect(() => {
     const loadTransactions = async () => {
       try {
@@ -136,9 +142,11 @@ export function HistoryTable() {
     loadTransactions();
   }, []);
 
+  // Berechnet die Daten die anzuzeigen sind - Filterung nach Datum und Paginierung
   const { rowsForPage, totalItems, pageCount, safePage } = useMemo(() => {
     let filtered = transactions;
 
+    // Filterung nach Datum
     if (from || to) {
       filtered = filtered.filter((tx) => {
         const txDate = dayjs(tx.date);
@@ -148,6 +156,7 @@ export function HistoryTable() {
       });
     }
 
+    // Paginierung
     const total = filtered.length;
     const pages = Math.max(1, Math.ceil(total / pageSize));
     const current = Math.min(Math.max(page, 1), pages);
@@ -394,6 +403,7 @@ type TransactionDetailsSheetProps = {
   transaction: Transaktion | null;
 };
 
+// Komponente für die Detailansicht (nach dem öffnen der Zeile)
 function TransactionDetailsSheet({
   open,
   onOpenChange,
