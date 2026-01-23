@@ -25,7 +25,7 @@ export function PerformanceChart() {
   const type = usePrices((s) => s.type)
   const setType = usePrices((s) => s.setType)
   const getSeries = usePrices((s) => s.getSeries)
-  const allSeries = useMemo(() => getSeries(), [type, getSeries])
+  const allSeries = useMemo(() => getSeries(), [getSeries])
   // Filtert die Transaktionen nach Zeitbereich
   const filteredSeries = useMemo(() => {
     if (selectedRange === "Max" || allSeries.length === 0) {
@@ -164,7 +164,7 @@ export function PerformanceChart() {
                 variant={selectedRange === range ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedRange(range)}
-                className="min-w-[3rem]"
+                className="min-w-12"
                 aria-label={`${range} Zeitbereich auswählen`}
               >
                 {range}
