@@ -7,7 +7,7 @@ import { useUiStore } from "@/stores/ui-store";
 import { useAccessibilityClasses } from "@/hooks/useAccessibilityClasses";
 import type { ViewId } from "@/types/view";
 import type { LucideIcon } from "lucide-react";
-import { Languages } from 'lucide-react';
+/* import { Languages } from 'lucide-react'; */
 import {
   LayoutDashboard,
   Coins,
@@ -15,6 +15,7 @@ import {
   Accessibility as AccessibilityIcon,
   ChevronRight,
   Wallet,
+  ShieldBan
 } from "lucide-react";
 
 type AppLayoutProps = {
@@ -127,6 +128,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
     | "portfolio"
     | "assets"
     | "legal"
+    | "auth"
     | "accessibility";
 
   interface NavItemConfig {
@@ -153,14 +155,14 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
           id: "dashboard-overview" as ViewId,
           label: t("nav.dashboardOverview", "Overview"),
         },
-        {
+/*         {
           id: "dashboard-analytics" as ViewId,
           label: t("nav.dashboardAnalytics", "Analytics"),
         },
         {
           id: "dashboard-watchlist" as ViewId,
           label: t("nav.dashboardWatchlist", "Watchlist"),
-        },
+        }, */
       ],
     },
     {
@@ -220,6 +222,18 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
       ],
     },
     {
+      id: "auth",
+      label: t("nav.auth", "Auth"),
+      icon: ShieldBan,
+      collapsible: true,
+      items: [
+        {
+          id: "login" as ViewId,
+          label: t("nav.login", "Login"),
+        }
+      ],
+    },
+    {
       id: "accessibility",
       label: t("nav.accessibility", "Accessibility"),
       icon: AccessibilityIcon,
@@ -231,6 +245,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
         },
       ],
     },
+    
   ];
 
   const [openSections, setOpenSections] = useState<Record<NavSectionId, boolean>>({
@@ -238,6 +253,7 @@ function SidebarContent({ activeRoute, onNavigate }: SidebarContentProps) {
     portfolio: true,
     assets: false,
     legal: false,
+    auth: false,
     accessibility: true,
   });
 
@@ -387,8 +403,8 @@ function HeaderLanguageToggle() {
         currentLang === "de" ? "Switch to English" : "Auf Deutsch umschalten"
       }
     >
-      <Languages />
-    </Button>/* {currentLang === "de" ? "DE" : "EN"} */
+      {currentLang === "de" ? "DE" : "EN"}
+    </Button>/* <Languages /> */
   );
 }
 

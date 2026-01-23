@@ -1,8 +1,8 @@
 export const VIEWS = [
   // Dashboard
   "dashboard-overview",
-  "dashboard-analytics",
-  "dashboard-watchlist",
+/*   "dashboard-analytics",
+  "dashboard-watchlist", */
 
   // Portfolio
   "portfolio",
@@ -18,6 +18,9 @@ export const VIEWS = [
   "legal-imprint",
   "legal-privacy",
   "legal-terms",
+
+  // Auth
+  "login",
 
   // Accessibility
   "accessibility",

@@ -8,12 +8,13 @@ import { AccessibilityPage } from "./pages/accessiblity/AccessibilityPage";
 import { InformationPage } from "./pages/dashboard/InformationPage";
 import { PortfolioWalletPage } from "./pages/portfolio/PortfolioWalletPage";
 import { PortfolioHistoryPage } from "./pages/portfolio/PortfolioHistoryPage";
-import { DashboardAnalyticsPage } from "./pages/dashboard/DashboardAnalyticsPage";
-import { DashboardWatchlistPage } from "./pages/dashboard/DashboardWatchlistPage";
+/* import { DashboardAnalyticsPage } from "./pages/dashboard/DashboardAnalyticsPage";
+import { DashboardWatchlistPage } from "./pages/dashboard/DashboardWatchlistPage"; */
 /* import { AssetsCryptoPage } from "./pages/assets/AssetsCryptoPage";
 import { AssetsFiatPage } from "./pages/assets/AssetsFiatPage"; */
 import { LegalPrivacyPage } from "./pages/legal/LegalPrivacyPage";
 import { LegalTermsPage } from "./pages/legal/LegalTermsPage";
+/* import { LoginPage } from "./pages/auth/LoginPage"; */
 
 // Root React component of the application.
 // This is basically our “router” for the different views (dashboard, info, etc.),
@@ -34,12 +35,12 @@ export function App() {
     case "dashboard-overview":
       content = <DashboardPage />;
       break;
-    case "dashboard-analytics":
+/*     case "dashboard-analytics":
       content = <DashboardAnalyticsPage />;
       break;
     case "dashboard-watchlist":
       content = <DashboardWatchlistPage />;
-      break;
+      break; */
 
     // Portfolio group
     case "portfolio-wallet":
@@ -70,6 +71,11 @@ export function App() {
     case "legal-terms":
       content = <LegalTermsPage />;
       break;
+
+    // Auth group
+/*     case "login":
+      content = <LoginPage />;
+      break; */
 
     // Accessibility (no sub-pages)
     case "accessibility":
